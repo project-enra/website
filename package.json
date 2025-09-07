@@ -1,0 +1,19 @@
+{
+  "name": "veilglass-website",
+  "version": "1.0.0",
+  "description": "Veilglass mystical heritage discovery website - Coming soon to Android and iOS",
+  "scripts": {
+    "build": "echo 'No build needed - static site'",
+    "start": "echo 'Static site - open index.html in browser'"
+  },
+  "keywords": [
+    "veilglass",
+    "heritage",
+    "cultural-discovery",
+    "mystical",
+    "mobile-app"
+  ],
+  "author": "Project Enra",
+  "license": "MIT",
+  "private": true
+}
