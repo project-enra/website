@@ -372,20 +372,20 @@ window.addEventListener('scroll', function() {
 
 // Enhanced contact form with mystical effects
 document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent form submission
+    
     const formData = new FormData(this);
     const name = formData.get('name');
-    const email = formData.get('_replyto');
+    const email = formData.get('email');
     const message = formData.get('message');
     
     if (!name || !email || !message) {
-        e.preventDefault();
         this.showMysticalAlert('The ancient spirits require all fields to be filled...', 'warning');
         return;
     }
     
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-        e.preventDefault();
         this.showMysticalAlert('The mystical correspondence address seems incomplete...', 'warning');
         return;
     }
@@ -397,8 +397,14 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     submitButton.disabled = true;
     submitButton.style.background = 'linear-gradient(135deg, #8B4513, #D28117)';
     
-    // Let the form submit naturally to Formspree
-    // The mystical alert will show on the thank-you page
+    // Show professional message for Google Play verification
+    setTimeout(() => {
+        this.showMysticalAlert('Thank you for your interest! Please contact us directly at contact@project-enra.com for immediate assistance.', 'success');
+        this.reset();
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+        submitButton.style.background = '';
+    }, 2000);
 });
 
 // Mystical alert system
