@@ -1,5 +1,82 @@
 // 🔮 VEILGLASS - CUTTING EDGE 2025 MYSTICAL EXPERIENCE 🔮
 
+// Email form handling
+document.addEventListener('DOMContentLoaded', function() {
+    const emailForm = document.getElementById('emailForm');
+    const successMessage = document.getElementById('successMessage');
+    
+    if (emailForm) {
+        emailForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Bot protection: check honeypot field
+            const honeypot = emailForm.querySelector('input[name="website"]');
+            if (honeypot && honeypot.value !== '') {
+                // Silent fail for bots
+                console.log('Bot detected');
+                return;
+            }
+            
+            // Rate limiting: prevent rapid submissions
+            const lastSubmission = localStorage.getItem('lastEmailSubmission');
+            const now = Date.now();
+            if (lastSubmission && (now - parseInt(lastSubmission)) < 30000) {
+                alert('Please wait before submitting again.');
+                return;
+            }
+            
+            const formData = new FormData(emailForm);
+            const submitBtn = emailForm.querySelector('.mystical-submit');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const originalText = btnText.textContent;
+            
+            // Show loading state
+            btnText.textContent = 'Joining the Circle...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Submit to Web3Forms
+                const response = await fetch(emailForm.action, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    // Store submission time
+                    localStorage.setItem('lastEmailSubmission', now.toString());
+                    
+                    // Hide form and show success message
+                    emailForm.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    
+                    // Add mystical entrance animation
+                    successMessage.style.opacity = '0';
+                    successMessage.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        successMessage.style.transition = 'all 0.6s ease';
+                        successMessage.style.opacity = '1';
+                        successMessage.style.transform = 'translateY(0)';
+                    }, 100);
+                    
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                btnText.textContent = 'Try Again';
+                alert('The mystical energies are disrupted. Please try again.');
+            } finally {
+                setTimeout(() => {
+                    btnText.textContent = originalText;
+                    submitBtn.disabled = false;
+                }, 2000);
+            }
+        });
+    }
+});
+
 // Mobile navigation toggle
 document.addEventListener('DOMContentLoaded', function() {
     const navToggle = document.querySelector('.nav-toggle');

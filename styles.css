@@ -682,7 +682,7 @@ section {
     color: #E6941F;
 }
 
-.contact-form {
+.email-signup-container {
     background: linear-gradient(135deg, rgba(45, 24, 16, 0.3), rgba(210, 129, 23, 0.1));
     padding: 3rem;
     border-radius: 16px;
@@ -691,6 +691,165 @@ section {
         0 12px 40px rgba(0, 0, 0, 0.4),
         inset 0 1px 0 rgba(210, 129, 23, 0.2);
     backdrop-filter: blur(15px);
+}
+
+.signup-intro {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.signup-intro h4 {
+    color: #E6941F;
+    font-family: 'Uncial Antiqua', serif;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 15px rgba(230, 148, 31, 0.5);
+}
+
+.signup-intro p {
+    color: #e8e3d3;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.mystical-email-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.mystical-email-form .form-group {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.mystical-email-form label {
+    display: block;
+    color: #E6941F;
+    font-family: 'Uncial Antiqua', serif;
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+    text-shadow: 0 0 10px rgba(230, 148, 31, 0.3);
+}
+
+.mystical-email-form input[type="email"] {
+    width: 100%;
+    padding: 1.2rem 1.5rem;
+    background: linear-gradient(135deg, rgba(45, 24, 16, 0.3), rgba(0, 0, 0, 0.6));
+    border: 2px solid rgba(210, 129, 23, 0.3);
+    border-radius: 12px;
+    color: #e8e3d3;
+    font-family: 'IM Fell English', serif;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(230, 148, 31, 0.1);
+}
+
+.mystical-email-form input[type="email"]:focus {
+    outline: none;
+    border-color: #E6941F;
+    box-shadow: 
+        0 0 20px rgba(230, 148, 31, 0.4),
+        0 4px 15px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(230, 148, 31, 0.2);
+    background: linear-gradient(135deg, rgba(45, 24, 16, 0.4), rgba(0, 0, 0, 0.7));
+}
+
+.mystical-email-form input[type="email"]::placeholder {
+    color: rgba(232, 227, 211, 0.5);
+    font-style: italic;
+}
+
+.input-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, transparent, rgba(230, 148, 31, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.mystical-email-form input[type="email"]:focus + .input-glow {
+    opacity: 1;
+}
+
+.mystical-submit {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.mystical-submit .btn-text {
+    position: relative;
+    z-index: 2;
+}
+
+.btn-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(230, 148, 31, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    animation: mystical-shimmer 3s ease-in-out infinite;
+}
+
+.mystical-submit:hover .btn-particles {
+    opacity: 1;
+}
+
+@keyframes mystical-shimmer {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+}
+
+.success-message {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(45, 24, 16, 0.4), rgba(46, 95, 46, 0.3));
+    border: 2px solid rgba(76, 175, 80, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.success-message h4 {
+    color: #4CAF50;
+    font-family: 'Uncial Antiqua', serif;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+}
+
+.success-message p {
+    color: #e8e3d3;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.success-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(76, 175, 80, 0.3), transparent);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: success-pulse 2s ease-in-out infinite;
+}
+
+@keyframes success-pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+    50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.1; }
 }
 
 .form-group {
@@ -949,7 +1108,7 @@ section {
     }
 
     .discovery-card,
-    .contact-form {
+    .email-signup-container {
         padding: 2rem;
     }
 

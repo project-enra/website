@@ -140,31 +140,44 @@
 
         <section id="contact" class="contact">
             <div class="container">
-                <h2>Contact Us</h2>
+                <h2>Join the Quest</h2>
                 <div class="contact-content">
                     <div class="contact-info">
-                        <h3>Commune with the Keepers</h3>
-                        <p>Ready to embark on your mystical journey through hidden heritage? The ancient paths await your footsteps.</p>
+                        <h3>Become a Keeper of Secrets</h3>
+                        <p>Enter your mystical correspondence below to be among the first to know when Veilglass unveils its ancient powers. Join our sacred circle and be notified when the app launches.</p>
                         <div class="contact-details">
-                            <p><strong>Mystical Correspondence:</strong> contact@project-enra.com</p>
-                            <p><strong>Oracle Response:</strong> Within the turning of one sun</p>
+                            <p><strong>The Journey Begins:</strong> Soon</p>
+                            <p><strong>Your Quest Awaits:</strong> Be the first to explore</p>
+                            <p><strong>Questions?</strong> contact@project-enra.com</p>
                         </div>
                     </div>
-                    <form class="contact-form" id="contactForm">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" id="name" name="name" required>
+                    <div class="email-signup-container">
+                        <div class="signup-intro">
+                            <h4>Enter Your Email to Begin</h4>
+                            <p>Join the mystical mailing list and unlock early access to hidden heritage discoveries.</p>
                         </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="_replyto" required>
+                        <form class="mystical-email-form" id="emailForm" action="https://api.web3forms.com/submit" method="POST">
+                            <!-- Web3Forms access key - REPLACE WITH YOUR ACTUAL KEY -->
+                            <input type="hidden" name="access_key" value="508b99e8-8550-49e0-b805-ec6ca437c4e6">
+                            <!-- Bot protection: hidden field -->
+                            <input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off">
+                            
+                            <div class="form-group">
+                                <label for="email">Your Mystical Correspondence</label>
+                                <input type="email" id="email" name="email" required placeholder="Enter your email address..." autocomplete="email">
+                                <div class="input-glow"></div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mystical-submit">
+                                <span class="btn-text">Join the Sacred Circle</span>
+                                <div class="btn-particles"></div>
+                            </button>
+                        </form>
+                        <div class="success-message" id="successMessage" style="display: none;">
+                            <div class="success-glow"></div>
+                            <h4>Welcome to the Circle</h4>
+                            <p>Your mystical correspondence has been received. The ancient paths await your footsteps.</p>
                         </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="4" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send Missive</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </section>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veilglass - Internal Testing Invitation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&family=Uncial+Antiqua&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'IM Fell English', serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e8e6e3;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(13, 13, 13, 0.95);
+            border: 2px solid #8b7355;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(139, 115, 85, 0.3);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 2px solid #8b7355;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="fog" patternUnits="userSpaceOnUse" width="20" height="20"><circle cx="10" cy="10" r="2" fill="%23ffffff" opacity="0.02"/></pattern></defs><rect width="100" height="100" fill="url(%23fog)"/></svg>');
+            pointer-events: none;
+        }
+        
+         .logo-title {
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             margin-bottom: 20px;
+             position: relative;
+             z-index: 1;
+         }
+         
+         .logo-img {
+             width: 120px;
+             height: 120px;
+             filter: drop-shadow(0 0 15px rgba(139, 115, 85, 0.6));
+         }
+        
+        .main-title {
+            font-family: 'Uncial Antiqua', cursive;
+            font-size: 2.2em;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            margin: 0;
+        }
+        
+        .subtitle {
+            font-size: 1.1em;
+            color: #c9aa71;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .greeting {
+            font-size: 1.2em;
+            color: #d4af37;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section h2 {
+            font-family: 'Uncial Antiqua', cursive;
+            font-size: 1.4em;
+            color: #c9aa71;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        .play-link {
+            background: linear-gradient(135deg, #d4af37 0%, #c9aa71 100%);
+            color: #0d0d0d;
+            padding: 15px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+            display: inline-block;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .play-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        }
+        
+        .testing-focus {
+            background: rgba(139, 115, 85, 0.1);
+            border: 1px solid #8b7355;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .testing-focus h3 {
+            color: #d4af37;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .testing-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .testing-list li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .testing-list li::before {
+            content: '⚡';
+            position: absolute;
+            left: 0;
+            color: #c9aa71;
+        }
+        
+        .instructions {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 4px solid #d4af37;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .footer {
+            background: rgba(26, 26, 46, 0.8);
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #8b7355;
+            font-size: 0.9em;
+            color: #8b7355;
+        }
+        
+        .contact-info {
+            margin-top: 15px;
+            font-style: italic;
+        }
+        
+        .mystical-border {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #d4af37 50%, transparent 100%);
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .main-title {
+                font-size: 1.8em;
+            }
+            
+             .logo-img {
+                 width: 100px;
+                 height: 100px;
+             }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+             <div class="logo-title">
+                 <img src="https://project-enra.com/Images/Veillogo.png" alt="Veilglass" class="logo-img">
+             </div>
+            <p class="subtitle">Unveil the Hidden Heritage</p>
+        </div>
+        
+        <div class="content">   
+            <div class="greeting">
+                Greetings, Keeper of Ancient Wisdom
+            </div>
+            
+            <div class="section">
+                <p>You have been chosen to embark on a mystical journey through the veil that separates the mundane from the magical. As an internal tester for Veilglass, you hold the sacred responsibility of helping us perfect this cultural heritage discovery experience.</p>
+                
+                <p>The ancient app awaits your exploration through the Google Play internal testing portal:</p>
+                
+                <div style="text-align: center;">
+                    <a href="https://play.google.com/apps/internaltest/4700844661998838589" class="play-link">
+                        🔮 Enter the Mystical Realm
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mystical-border"></div>
+            
+            <div class="section">
+                <h2>Your Sacred Testing Quest</h2>
+                
+                <div class="instructions">
+                    <strong>Installation Ritual:</strong><br>
+                    1. Click the link above on your Android device<br>
+                    2. Accept the internal testing invitation<br>
+                    3. Download Veilglass from the Play Store<br>
+                    4. Grant location permissions for the full mystical experience
+                </div>
+                
+                <div class="testing-focus">
+                    <h3>Focus Your Mystical Powers On:</h3>
+                    <ul class="testing-list">
+                        <li><strong>GPS & Location Accuracy:</strong> Test the fog clearing mechanics as you physically move</li>
+                        <li><strong>Cultural Discovery:</strong> Explore POIs (castles, pubs, monuments, nature reserves)</li>
+                        <li><strong>Parish Boundaries:</strong> Check if local administrative boundaries display correctly</li>
+                        <li><strong>Fog of War System:</strong> Verify the mystical fog lifts as you explore new areas</li>
+                        <li><strong>App Performance:</strong> Monitor battery usage and overall responsiveness</li>
+                        <li><strong>Data Persistence:</strong> Close/reopen app to ensure progress saves properly</li>
+                        <li><strong>Cultural Content Quality:</strong> Evaluate relevance and accuracy of discovered heritage sites</li>
+                        <li><strong>UI/UX Experience:</strong> Test the mystical interface and navigation</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mystical-border"></div>
+            
+            <div class="section">
+                <h2>Commune Your Findings</h2>
+                <p>Your insights are invaluable to perfecting this sacred journey. Please share:</p>
+                <ul class="testing-list">
+                    <li>Any crashes, bugs, or unusual behavior</li>
+                    <li>GPS accuracy issues or fog clearing problems</li>
+                    <li>Missing or incorrect cultural heritage information</li>
+                    <li>Performance concerns or battery drain</li>
+                    <li>Suggestions for improving the mystical experience</li>
+                    <li>Overall impressions and user experience feedback</li>
+                </ul>
+                
+                <div class="instructions">
+                    <strong>Testing Timeline:</strong> Please conduct your mystical exploration over the next 4 weeks and provide feedback by 10/10/2025.
+                </div>
+            </div>
+            
+            <div class="section">
+                <p style="text-align: center; font-style: italic; color: #c9aa71;">
+                    "The veil between worlds grows thin for those who seek with purpose and wisdom."
+                </p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Thank you for joining this sacred quest to preserve and reveal our hidden heritage.</p>
+            <div class="contact-info">
+                <p><strong>Mystical Correspondence:</strong> contact@project-enra.com</p>
+                <p>May your journey unveil wonders beyond imagination.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
