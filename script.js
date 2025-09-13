@@ -35,33 +35,29 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = true;
             
             try {
-                // Submit to Web3Forms
+                // Submit to Mailchimp via AJAX (no redirect)
                 const response = await fetch(emailForm.action, {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    mode: 'no-cors' // Mailchimp doesn't support CORS, but submission still works
                 });
                 
-                if (response.ok) {
-                    // Store submission time
-                    localStorage.setItem('lastEmailSubmission', now.toString());
-                    
-                    // Hide form and show success message
-                    emailForm.style.display = 'none';
-                    successMessage.style.display = 'block';
-                    
-                    // Add mystical entrance animation
-                    successMessage.style.opacity = '0';
-                    successMessage.style.transform = 'translateY(20px)';
-                    
-                    setTimeout(() => {
-                        successMessage.style.transition = 'all 0.6s ease';
-                        successMessage.style.opacity = '1';
-                        successMessage.style.transform = 'translateY(0)';
-                    }, 100);
-                    
-                } else {
-                    throw new Error('Network response was not ok');
-                }
+                // Store submission time
+                localStorage.setItem('lastEmailSubmission', now.toString());
+                
+                // Show success message (assume success since Mailchimp doesn't return proper CORS)
+                emailForm.style.display = 'none';
+                successMessage.style.display = 'block';
+                
+                // Add mystical entrance animation
+                successMessage.style.opacity = '0';
+                successMessage.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    successMessage.style.transition = 'all 0.6s ease';
+                    successMessage.style.opacity = '1';
+                    successMessage.style.transform = 'translateY(0)';
+                }, 100);
                 
             } catch (error) {
                 console.error('Error:', error);
