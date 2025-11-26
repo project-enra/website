@@ -444,7 +444,9 @@ window.addEventListener('scroll', function() {
 });
 
 // Enhanced contact form with mystical effects
-document.getElementById('contactForm').addEventListener('submit', function(e) {
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
     e.preventDefault(); // Prevent form submission
     
     const formData = new FormData(this);
@@ -478,7 +480,8 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
         submitButton.disabled = false;
         submitButton.style.background = '';
     }, 2000);
-});
+    });
+}
 
 // Mystical alert system
 HTMLFormElement.prototype.showMysticalAlert = function(message, type) {
@@ -569,6 +572,25 @@ window.addEventListener('load', function() {
     new SimpleCardSystem();
     new SmoothScrollSystem();
     new PerformanceMonitor();
+    
+    // Initialize fog of war map with delay to ensure DOM is ready
+    // DISABLED: Uncomment below to re-enable fog map
+    /*
+    setTimeout(() => {
+        console.log('🗺️ Initializing Fog of War Map...');
+        const fogMap = new FogOfWarMap('fogMap');
+        if (fogMap.canvas) {
+            console.log('✅ Fog map canvas found, starting animation');
+            fogMap.startAnimation();
+            window.fogMap = fogMap; // Make globally accessible for debugging
+        } else {
+            console.error('❌ Fog map canvas not found!');
+            // Try to find any canvas elements
+            const allCanvases = document.querySelectorAll('canvas');
+            console.log('🔍 All canvas elements found:', allCanvases);
+        }
+    }, 100);
+    */
     
     // Add loading completion effects
     document.body.classList.add('loaded');
@@ -800,6 +822,536 @@ class MysticalCursor {
 // Initialize mystical cursor on devices that support it
 if (!('ontouchstart' in window)) {
     new MysticalCursor();
+}
+
+// 🗺️ MYSTICAL FOG OF WAR MINI MAP SYSTEM 🗺️
+class FogOfWarMap {
+    constructor(canvasId) {
+        console.log(`🔍 Looking for canvas with ID: ${canvasId}`);
+        this.canvas = document.getElementById(canvasId);
+        if (!this.canvas) {
+            console.error(`❌ Canvas with ID '${canvasId}' not found!`);
+            return;
+        }
+        console.log('✅ Canvas found:', this.canvas);
+        
+        this.ctx = this.canvas.getContext('2d');
+        this.width = this.canvas.width;
+        this.height = this.canvas.height;
+        
+        // Fog state - 0 = fully fogged, 1 = fully clear
+        this.fogData = new Array(this.width * this.height).fill(0);
+        this.clearRadius = 25;
+        this.isDragging = false;
+        this.lastClearPos = null;
+        
+        // Heritage sites (sample locations)
+        this.heritageSites = [
+            { x: 120, y: 80, name: "Ancient Castle", type: "castle", revealed: false },
+            { x: 280, y: 150, name: "Sacred Grove", type: "forest", revealed: false },
+            { x: 200, y: 200, name: "Historic Pub", type: "pub", revealed: false },
+            { x: 80, y: 180, name: "Stone Circle", type: "monument", revealed: false },
+            { x: 320, y: 100, name: "Old Mill", type: "mill", revealed: false }
+        ];
+        
+        // Progress tracking
+        this.totalPixels = this.width * this.height;
+        this.clearedPixels = 0;
+        this.sitesFound = 0;
+        
+        console.log('🎨 Canvas dimensions:', this.width, 'x', this.height);
+        
+        this.init();
+        this.loadProgress();
+        this.render();
+        
+        // Test canvas by drawing a simple rectangle
+        this.ctx.fillStyle = '#ff0000';
+        this.ctx.fillRect(10, 10, 50, 50);
+        console.log('🔴 Test red rectangle drawn');
+        
+        // Add click test
+        this.canvas.addEventListener('click', (e) => {
+            console.log('🖱️ Canvas clicked!', e);
+            const pos = this.getMousePos(e);
+            console.log('📍 Click position:', pos);
+            // Draw a test circle at click position
+            this.ctx.fillStyle = '#00ff00';
+            this.ctx.beginPath();
+            this.ctx.arc(pos.x, pos.y, 10, 0, Math.PI * 2);
+            this.ctx.fill();
+        });
+    }
+    
+    init() {
+        // Mouse events
+        this.canvas.addEventListener('mousedown', (e) => this.startClearing(e));
+        this.canvas.addEventListener('mousemove', (e) => this.continueClear(e));
+        this.canvas.addEventListener('mouseup', () => this.stopClearing());
+        this.canvas.addEventListener('mouseleave', () => this.stopClearing());
+        
+        // Touch events for mobile
+        this.canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = this.canvas.getBoundingClientRect();
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            this.startClearing(mouseEvent);
+        });
+        
+        this.canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = this.canvas.getBoundingClientRect();
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            this.continueClear(mouseEvent);
+        });
+        
+        this.canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.stopClearing();
+        });
+        
+        // Reset button
+        const resetBtn = document.getElementById('resetFog');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => this.resetFog());
+        }
+    }
+    
+    getMousePos(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        return {
+            x: Math.floor((e.clientX - rect.left) * (this.width / rect.width)),
+            y: Math.floor((e.clientY - rect.top) * (this.height / rect.height))
+        };
+    }
+    
+    startClearing(e) {
+        console.log('🖱️ Start clearing fog at:', e);
+        this.isDragging = true;
+        const pos = this.getMousePos(e);
+        console.log('📍 Mouse position:', pos);
+        this.clearFogAt(pos.x, pos.y);
+        this.lastClearPos = pos;
+    }
+    
+    continueClear(e) {
+        if (!this.isDragging) return;
+        
+        const pos = this.getMousePos(e);
+        
+        // Draw line between last position and current position for smooth clearing
+        if (this.lastClearPos) {
+            this.clearFogLine(this.lastClearPos.x, this.lastClearPos.y, pos.x, pos.y);
+        }
+        
+        this.clearFogAt(pos.x, pos.y);
+        this.lastClearPos = pos;
+    }
+    
+    stopClearing() {
+        this.isDragging = false;
+        this.lastClearPos = null;
+        this.saveProgress();
+    }
+    
+    clearFogAt(centerX, centerY) {
+        let pixelsCleared = 0;
+        
+        for (let x = centerX - this.clearRadius; x <= centerX + this.clearRadius; x++) {
+            for (let y = centerY - this.clearRadius; y <= centerY + this.clearRadius; y++) {
+                if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
+                    const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+                    if (distance <= this.clearRadius) {
+                        const index = y * this.width + x;
+                        const oldValue = this.fogData[index];
+                        
+                        // Smooth clearing with falloff
+                        const clearAmount = Math.max(0, 1 - (distance / this.clearRadius));
+                        this.fogData[index] = Math.min(1, this.fogData[index] + clearAmount * 0.3);
+                        
+                        if (oldValue < 0.5 && this.fogData[index] >= 0.5) {
+                            pixelsCleared++;
+                        }
+                    }
+                }
+            }
+        }
+        
+        this.clearedPixels += pixelsCleared;
+        this.checkHeritageSites(centerX, centerY);
+        this.updateStats();
+        this.render();
+    }
+    
+    clearFogLine(x1, y1, x2, y2) {
+        const dx = Math.abs(x2 - x1);
+        const dy = Math.abs(y2 - y1);
+        const sx = x1 < x2 ? 1 : -1;
+        const sy = y1 < y2 ? 1 : -1;
+        let err = dx - dy;
+        
+        let x = x1;
+        let y = y1;
+        
+        while (true) {
+            this.clearFogAt(x, y);
+            
+            if (x === x2 && y === y2) break;
+            
+            const e2 = 2 * err;
+            if (e2 > -dy) {
+                err -= dy;
+                x += sx;
+            }
+            if (e2 < dx) {
+                err += dx;
+                y += sy;
+            }
+        }
+    }
+    
+    checkHeritageSites(clearX, clearY) {
+        this.heritageSites.forEach(site => {
+            if (!site.revealed) {
+                const distance = Math.sqrt((clearX - site.x) ** 2 + (clearY - site.y) ** 2);
+                if (distance <= this.clearRadius + 10) {
+                    site.revealed = true;
+                    this.sitesFound++;
+                    this.showSiteDiscovery(site);
+                }
+            }
+        });
+    }
+    
+    showSiteDiscovery(site) {
+        // Create mystical discovery notification
+        const notification = document.createElement('div');
+        notification.className = 'site-discovery';
+        notification.innerHTML = `
+            <div class="discovery-glow"></div>
+            <div class="discovery-icon">${this.getSiteIcon(site.type)}</div>
+            <div class="discovery-text">
+                <strong>Heritage Site Discovered!</strong>
+                <span>${site.name}</span>
+            </div>
+        `;
+        
+        // Add styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .site-discovery {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, rgba(45, 24, 16, 0.95), rgba(210, 129, 23, 0.3));
+                border: 2px solid #E6941F;
+                border-radius: 12px;
+                padding: 1rem 1.5rem;
+                color: #E6941F;
+                font-family: 'IM Fell English', serif;
+                z-index: 10000;
+                backdrop-filter: blur(20px);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+                animation: discoverySlideIn 0.6s ease-out;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                max-width: 300px;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .discovery-glow {
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(230, 148, 31, 0.2) 0%, transparent 70%);
+                animation: discoveryGlow 2s ease-in-out infinite;
+            }
+            
+            .discovery-icon {
+                font-size: 2rem;
+                filter: drop-shadow(0 0 10px rgba(230, 148, 31, 0.8));
+                position: relative;
+                z-index: 2;
+            }
+            
+            .discovery-text {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                z-index: 2;
+            }
+            
+            .discovery-text strong {
+                font-size: 1rem;
+                margin-bottom: 0.3rem;
+                text-shadow: 0 0 10px rgba(230, 148, 31, 0.5);
+            }
+            
+            .discovery-text span {
+                font-size: 0.9rem;
+                opacity: 0.9;
+            }
+            
+            @keyframes discoverySlideIn {
+                0% { 
+                    opacity: 0; 
+                    transform: translateX(100%) scale(0.8); 
+                }
+                100% { 
+                    opacity: 1; 
+                    transform: translateX(0) scale(1); 
+                }
+            }
+            
+            @keyframes discoveryGlow {
+                0%, 100% { opacity: 0.2; }
+                50% { opacity: 0.4; }
+            }
+        `;
+        
+        document.head.appendChild(style);
+        document.body.appendChild(notification);
+        
+        // Remove after 4 seconds
+        setTimeout(() => {
+            notification.style.animation = 'discoverySlideIn 0.6s ease-out reverse';
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                    document.head.removeChild(style);
+                }
+            }, 600);
+        }, 4000);
+    }
+    
+    getSiteIcon(type) {
+        const icons = {
+            castle: '🏰',
+            forest: '🌲',
+            pub: '🍺',
+            monument: '🗿',
+            mill: '⚙️'
+        };
+        return icons[type] || '📍';
+    }
+    
+    updateStats() {
+        const exploredPercent = Math.floor((this.clearedPixels / this.totalPixels) * 100);
+        
+        const percentEl = document.getElementById('exploredPercent');
+        const sitesEl = document.getElementById('sitesFound');
+        
+        if (percentEl) percentEl.textContent = `${Math.min(exploredPercent, 100)}%`;
+        if (sitesEl) sitesEl.textContent = this.sitesFound;
+    }
+    
+    render() {
+        console.log('🎨 Rendering fog map...');
+        
+        // Clear canvas
+        this.ctx.fillStyle = '#2a2a2a';
+        this.ctx.fillRect(0, 0, this.width, this.height);
+        
+        // Draw base map (simple terrain)
+        this.drawBaseMap();
+        
+        // Draw heritage sites
+        this.drawHeritageSites();
+        
+        // Draw fog overlay
+        this.drawFog();
+        
+        // Add mystical particles
+        this.drawParticles();
+        
+        console.log('✅ Render complete');
+    }
+    
+    drawBaseMap() {
+        // Simple terrain generation
+        this.ctx.fillStyle = '#1a4a1a'; // Dark green for forests
+        for (let i = 0; i < 8; i++) {
+            const x = Math.random() * this.width;
+            const y = Math.random() * this.height;
+            const radius = 20 + Math.random() * 30;
+            
+            this.ctx.beginPath();
+            this.ctx.arc(x, y, radius, 0, Math.PI * 2);
+            this.ctx.fill();
+        }
+        
+        // Rivers/paths
+        this.ctx.strokeStyle = '#4a6a8a';
+        this.ctx.lineWidth = 3;
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, this.height * 0.7);
+        this.ctx.quadraticCurveTo(this.width * 0.5, this.height * 0.5, this.width, this.height * 0.3);
+        this.ctx.stroke();
+    }
+    
+    drawHeritageSites() {
+        this.heritageSites.forEach(site => {
+            if (site.revealed) {
+                // Glowing heritage site
+                const gradient = this.ctx.createRadialGradient(
+                    site.x, site.y, 0,
+                    site.x, site.y, 15
+                );
+                gradient.addColorStop(0, 'rgba(230, 148, 31, 0.8)');
+                gradient.addColorStop(1, 'rgba(230, 148, 31, 0)');
+                
+                this.ctx.fillStyle = gradient;
+                this.ctx.beginPath();
+                this.ctx.arc(site.x, site.y, 15, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                // Site marker
+                this.ctx.fillStyle = '#E6941F';
+                this.ctx.beginPath();
+                this.ctx.arc(site.x, site.y, 4, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                // Pulsing effect
+                const pulseRadius = 8 + Math.sin(Date.now() * 0.003) * 3;
+                this.ctx.strokeStyle = 'rgba(230, 148, 31, 0.6)';
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath();
+                this.ctx.arc(site.x, site.y, pulseRadius, 0, Math.PI * 2);
+                this.ctx.stroke();
+            }
+        });
+    }
+    
+    drawFog() {
+        console.log('🌫️ Drawing fog overlay...');
+        
+        try {
+            const imageData = this.ctx.createImageData(this.width, this.height);
+            const data = imageData.data;
+            
+            for (let i = 0; i < this.fogData.length; i++) {
+                const fogAmount = 1 - this.fogData[i];
+                const pixelIndex = i * 4;
+                
+                // Mystical fog color with golden tint
+                data[pixelIndex] = 20 + fogAmount * 30;     // R
+                data[pixelIndex + 1] = 15 + fogAmount * 25; // G  
+                data[pixelIndex + 2] = 10 + fogAmount * 20; // B
+                data[pixelIndex + 3] = fogAmount * 200;     // A
+            }
+            
+            this.ctx.putImageData(imageData, 0, 0);
+            console.log('✅ Fog overlay drawn');
+        } catch (error) {
+            console.error('❌ Error drawing fog:', error);
+            
+            // Fallback: draw simple fog rectangles
+            this.ctx.fillStyle = 'rgba(30, 20, 15, 0.8)';
+            for (let x = 0; x < this.width; x += 10) {
+                for (let y = 0; y < this.height; y += 10) {
+                    const index = y * this.width + x;
+                    if (index < this.fogData.length && this.fogData[index] < 0.5) {
+                        this.ctx.fillRect(x, y, 10, 10);
+                    }
+                }
+            }
+        }
+    }
+    
+    drawParticles() {
+        // Add some mystical floating particles
+        const time = Date.now() * 0.001;
+        
+        for (let i = 0; i < 20; i++) {
+            const x = (Math.sin(time + i) * 50 + this.width / 2 + i * 20) % this.width;
+            const y = (Math.cos(time * 0.7 + i) * 30 + this.height / 2 + i * 15) % this.height;
+            
+            // Only show particles in cleared areas
+            const fogIndex = Math.floor(y) * this.width + Math.floor(x);
+            if (this.fogData[fogIndex] > 0.3) {
+                const alpha = this.fogData[fogIndex] * 0.6;
+                this.ctx.fillStyle = `rgba(230, 148, 31, ${alpha})`;
+                this.ctx.beginPath();
+                this.ctx.arc(x, y, 1 + Math.sin(time * 2 + i) * 0.5, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+        }
+    }
+    
+    resetFog() {
+        this.fogData.fill(0);
+        this.clearedPixels = 0;
+        this.sitesFound = 0;
+        this.heritageSites.forEach(site => site.revealed = false);
+        this.updateStats();
+        this.render();
+        this.saveProgress();
+        
+        // Show reset notification
+        const resetBtn = document.getElementById('resetFog');
+        if (resetBtn) {
+            const originalText = resetBtn.textContent;
+            resetBtn.textContent = 'The Veil Returns...';
+            resetBtn.disabled = true;
+            
+            setTimeout(() => {
+                resetBtn.textContent = originalText;
+                resetBtn.disabled = false;
+            }, 2000);
+        }
+    }
+    
+    saveProgress() {
+        const progress = {
+            fogData: Array.from(this.fogData),
+            clearedPixels: this.clearedPixels,
+            sitesFound: this.sitesFound,
+            heritageSites: this.heritageSites.map(site => ({...site}))
+        };
+        localStorage.setItem('veilglass_fog_progress', JSON.stringify(progress));
+    }
+    
+    loadProgress() {
+        const saved = localStorage.getItem('veilglass_fog_progress');
+        if (saved) {
+            try {
+                const progress = JSON.parse(saved);
+                this.fogData = new Float32Array(progress.fogData);
+                this.clearedPixels = progress.clearedPixels || 0;
+                this.sitesFound = progress.sitesFound || 0;
+                if (progress.heritageSites) {
+                    progress.heritageSites.forEach((savedSite, index) => {
+                        if (this.heritageSites[index]) {
+                            this.heritageSites[index].revealed = savedSite.revealed;
+                        }
+                    });
+                }
+                this.updateStats();
+            } catch (e) {
+                console.log('Could not load fog progress');
+            }
+        }
+    }
+    
+    startAnimation() {
+        const animate = () => {
+            this.render();
+            requestAnimationFrame(animate);
+        };
+        animate();
+    }
 }
 
 // 🎊 CONGRATULATIONS! YOU'VE REACHED THE END OF THE MYSTICAL CODE! 🎊
