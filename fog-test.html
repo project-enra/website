@@ -113,13 +113,22 @@
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
         }
         
-        .controls button.erase-mode {
+        .controls button.erase-mode-on {
             background: #c44536;
+            color: white;
         }
         
-        .controls button.erase-mode:hover,
-        .controls button.erase-mode.active {
+        .controls button.erase-mode-on:hover {
             background: #d55545;
+        }
+        
+        .controls button.draw-mode-on {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .controls button.draw-mode-on:hover {
+            background: #45a049;
         }
         
         .stats {
@@ -171,9 +180,8 @@
 <body>
     <h1>Fog of War Map</h1>
     <div class="instructions">
-        <span class="desktop-instructions">Hold SHIFT and drag to reveal/erase fog</span>
-        <span class="mobile-instructions" style="display: none;">Touch and drag to reveal/erase fog</span><br>
-        <small>Use mouse wheel to zoom, drag to pan the map</small>
+        Toggle Draw Mode to reveal/erase fog, then click and drag<br>
+        <small>Use mouse wheel to zoom, drag to pan the map (when Draw Mode is off)</small>
     </div>
     
     <div id="mapContainer">
@@ -183,15 +191,14 @@
     </div>
     
     <div class="controls">
-        <button id="modeToggle" class="active">🔍 Reveal Mode</button>
-        <button id="resetBtn">Reset Fog</button>
-        <button id="clearAllBtn">Clear All Fog</button>
+        <button id="drawModeToggle">🎨 Draw Mode: OFF</button>
+        <button id="eraseModeToggle">🧹 Erase Mode: OFF</button>
     </div>
     
     <div class="stats">
         <span>Explored: <span id="explored">0%</span></span>
         <span>Zoom: <span id="zoomLevel">13</span></span>
-        <span>Brush Size: <span id="brushSize">50m</span></span>
+        <span>Brush Size: <span id="brushSize">30m</span></span>
     </div>
 
     <!-- Leaflet JavaScript -->
@@ -208,6 +215,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyCzAPWP0EenOexGzI7yWHGBYxD_7Fasyk0",
             authDomain: "project-enra.firebaseapp.com",
+            databaseURL: "https://project-enra-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "project-enra",
             storageBucket: "project-enra.firebasestorage.app",
             messagingSenderId: "244726525511",
@@ -224,9 +232,9 @@
                 this.fogCanvas = null;
                 this.fogCtx = null;
                 this.isDragging = false;
-                this.isDrawingMode = false;
+                this.isDrawingMode = false; // Toggle for draw mode on/off
                 this.isEraseMode = false; // false = reveal fog, true = add fog back
-                this.brushSizeMeters = 50; // brush size in meters
+                this.brushSizeMeters = 7; // brush size in meters
                 this.baseZoom = 13; // reference zoom level for brush size
                 this.isMobile = this.detectMobile();
                 this.totalPixels = 0;
@@ -261,7 +269,6 @@
                 // Initial render
                 this.redrawFog();
                 this.updateZoomDisplay();
-                this.setupMobileUI();
                 this.setupFirebaseSync();
             }
             
@@ -338,24 +345,6 @@
             }
             
             setupEventListeners() {
-                // Keyboard events for drawing mode
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Shift' && !this.isDrawingMode) {
-                        this.isDrawingMode = true;
-                        this.fogCanvas.classList.add('drawing-mode');
-                        document.getElementById('modeIndicator').classList.add('active');
-                    }
-                });
-                
-                document.addEventListener('keyup', (e) => {
-                    if (e.key === 'Shift' && this.isDrawingMode) {
-                        this.isDrawingMode = false;
-                        this.isDragging = false;
-                        this.fogCanvas.classList.remove('drawing-mode');
-                        document.getElementById('modeIndicator').classList.remove('active');
-                    }
-                });
-                
                 // Mouse events (only work when in drawing mode)
                 this.fogCanvas.addEventListener('mousedown', (e) => {
                     if (this.isDrawingMode) {
@@ -386,53 +375,50 @@
                     this.isDragging = false;
                 });
                 
-                // Touch events for mobile (always allow drawing on touch)
+                // Touch events for mobile (only work when in drawing mode)
                 this.fogCanvas.addEventListener('touchstart', (e) => {
-                    this.isDrawingMode = true;
-                    this.isDragging = true;
-                    this.fogCanvas.classList.add('drawing-mode');
-                    document.getElementById('modeIndicator').classList.add('active');
-                    
-                    const touch = e.touches[0];
-                    const mouseEvent = new MouseEvent('mousedown', {
-                        clientX: touch.clientX,
-                        clientY: touch.clientY
-                    });
-                    this.clearFogAt(mouseEvent);
-                    e.preventDefault();
+                    if (this.isDrawingMode) {
+                        this.isDragging = true;
+                        
+                        const touch = e.touches[0];
+                        const mouseEvent = new MouseEvent('mousedown', {
+                            clientX: touch.clientX,
+                            clientY: touch.clientY
+                        });
+                        this.clearFogAt(mouseEvent);
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
                 });
                 
                 this.fogCanvas.addEventListener('touchmove', (e) => {
-                    if (this.isDragging) {
+                    if (this.isDragging && this.isDrawingMode) {
                         const touch = e.touches[0];
                         const mouseEvent = new MouseEvent('mousemove', {
                             clientX: touch.clientX,
                             clientY: touch.clientY
                         });
                         this.clearFogAt(mouseEvent);
+                        e.preventDefault();
+                        e.stopPropagation();
                     }
-                    e.preventDefault();
                 });
                 
                 this.fogCanvas.addEventListener('touchend', (e) => {
-                    this.isDragging = false;
-                    this.isDrawingMode = false;
-                    this.fogCanvas.classList.remove('drawing-mode');
-                    document.getElementById('modeIndicator').classList.remove('active');
-                    e.preventDefault();
+                    if (this.isDrawingMode) {
+                        this.isDragging = false;
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
                 });
                 
                 // Button events
-                document.getElementById('modeToggle').addEventListener('click', () => {
-                    this.toggleMode();
+                document.getElementById('drawModeToggle').addEventListener('click', () => {
+                    this.toggleDrawMode();
                 });
                 
-                document.getElementById('resetBtn').addEventListener('click', () => {
-                    this.resetFog();
-                });
-                
-                document.getElementById('clearAllBtn').addEventListener('click', () => {
-                    this.clearAllFog();
+                document.getElementById('eraseModeToggle').addEventListener('click', () => {
+                    this.toggleEraseMode();
                 });
                 
                 // Window resize
@@ -450,22 +436,18 @@
                 const containerPoint = L.point(x, y);
                 const latLng = this.map.containerPointToLatLng(containerPoint);
                 
-                // Use brush size directly in meters (no conversion needed)
-                const radiusInMeters = this.brushSizeMeters;
-                
                 if (this.isEraseMode) {
                     // Erase mode: remove nearby cleared areas
                     this.clearedAreas = this.clearedAreas.filter(area => {
                         const areaLatLng = L.latLng(area.lat, area.lng);
                         const distance = latLng.distanceTo(areaLatLng);
-                        return distance > (radiusInMeters + area.radius) * 0.7; // Overlap threshold
+                        return distance > this.brushSizeMeters * 1.4; // Overlap threshold
                     });
                 } else {
-                    // Reveal mode: add new cleared area
+                    // Reveal mode: add new cleared area (just store lat/lng)
                     this.clearedAreas.push({
                         lat: latLng.lat,
-                        lng: latLng.lng,
-                        radius: radiusInMeters
+                        lng: latLng.lng
                     });
                 }
                 
@@ -520,25 +502,34 @@
                        (navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
             }
             
-            setupMobileUI() {
-                if (this.isMobile) {
-                    document.querySelector('.desktop-instructions').style.display = 'none';
-                    document.querySelector('.mobile-instructions').style.display = 'inline';
+            toggleDrawMode() {
+                this.isDrawingMode = !this.isDrawingMode;
+                const button = document.getElementById('drawModeToggle');
+                
+                if (this.isDrawingMode) {
+                    button.textContent = '🎨 Draw Mode: ON';
+                    button.classList.add('draw-mode-on');
+                    this.fogCanvas.classList.add('drawing-mode');
+                    document.getElementById('modeIndicator').classList.add('active');
+                } else {
+                    button.textContent = '🎨 Draw Mode: OFF';
+                    button.classList.remove('draw-mode-on');
+                    this.fogCanvas.classList.remove('drawing-mode');
+                    document.getElementById('modeIndicator').classList.remove('active');
+                    this.isDragging = false; // Stop any current drawing
                 }
             }
             
-            toggleMode() {
+            toggleEraseMode() {
                 this.isEraseMode = !this.isEraseMode;
-                const button = document.getElementById('modeToggle');
+                const button = document.getElementById('eraseModeToggle');
                 
                 if (this.isEraseMode) {
-                    button.textContent = '🧽 Erase Mode';
-                    button.classList.add('erase-mode');
-                    button.classList.remove('active');
+                    button.textContent = '🧹 Erase Mode: ON';
+                    button.classList.add('erase-mode-on');
                 } else {
-                    button.textContent = '🔍 Reveal Mode';
-                    button.classList.remove('erase-mode');
-                    button.classList.add('active');
+                    button.textContent = '🧹 Erase Mode: OFF';
+                    button.classList.remove('erase-mode-on');
                 }
             }
             
@@ -623,8 +614,8 @@
                     const latLng = L.latLng(area.lat, area.lng);
                     const point = this.map.latLngToContainerPoint(latLng);
                     
-                    // Convert radius from meters to pixels at current zoom
-                    const radiusInPixels = area.radius / metersPerPixel;
+                    // Use current brush size from code (not stored radius)
+                    const radiusInPixels = this.brushSizeMeters / metersPerPixel;
                     
                     // Only draw if the point is visible on screen (with buffer)
                     if (point.x >= -radiusInPixels && point.x <= canvasWidth + radiusInPixels &&
@@ -640,34 +631,6 @@
                 this.fogCtx.globalCompositeOperation = 'source-over';
             }
             
-            resetFog() {
-                this.clearedAreas = [];
-                this.redrawFog();
-                this.clearedPixels = 0;
-                this.updateStats();
-                this.saveToFirebase();
-            }
-            
-            clearAllFog() {
-                // Create a large cleared area covering the entire visible map
-                const bounds = this.map.getBounds();
-                const center = this.map.getCenter();
-                
-                // Calculate a radius that covers the entire visible area
-                const corner = bounds.getNorthEast();
-                const radiusInMeters = center.distanceTo(corner) * 1.5; // Add some buffer
-                
-                this.clearedAreas = [{
-                    lat: center.lat,
-                    lng: center.lng,
-                    radius: radiusInMeters
-                }];
-                
-                this.redrawFog();
-                this.clearedPixels = this.totalPixels;
-                this.updateStats();
-                this.saveToFirebase();
-            }
             
             updateStats() {
                 // Calculate approximate cleared area
