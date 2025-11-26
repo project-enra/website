@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fog of War Map</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+          crossorigin=""/>
+    
+    <style>
+        body {
+            background: #0a0a0a;
+            color: #e8e3d3;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #D28117;
+            margin-bottom: 10px;
+        }
+        
+        .instructions {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #b8b3a3;
+            font-size: 14px;
+        }
+        
+        .mode-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(210, 129, 23, 0.9);
+            color: #0a0a0a;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 12px;
+            z-index: 2000;
+            display: none;
+        }
+        
+        .mode-indicator.active {
+            display: block;
+        }
+        
+        #mapContainer {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            border: 2px solid #D28117;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        #fogCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            cursor: crosshair;
+            pointer-events: none;
+        }
+        
+        #fogCanvas.drawing-mode {
+            pointer-events: auto;
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .controls button {
+            background: #D28117;
+            color: #0a0a0a;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            min-width: 120px;
+            touch-action: manipulation;
+        }
+        
+        .controls button:hover {
+            background: #e8941f;
+        }
+        
+        .controls button.active {
+            background: #e8941f;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .controls button.erase-mode-on {
+            background: #c44536;
+            color: white;
+        }
+        
+        .controls button.erase-mode-on:hover {
+            background: #d55545;
+        }
+        
+        .controls button.draw-mode-on {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .controls button.draw-mode-on:hover {
+            background: #45a049;
+        }
+        
+        .stats {
+            text-align: center;
+            margin: 20px;
+            color: #b8b3a3;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .stats span {
+            white-space: nowrap;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            #mapContainer {
+                height: 70vh;
+                min-height: 400px;
+            }
+            
+            .controls {
+                margin: 15px 5px;
+            }
+            
+            .controls button {
+                padding: 15px 20px;
+                font-size: 16px;
+                min-width: 140px;
+            }
+            
+            .stats {
+                font-size: 14px;
+                margin: 15px 5px;
+            }
+            
+            .instructions {
+                font-size: 13px;
+                padding: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Fog of War Map</h1>
+    <div class="instructions">
+        Toggle Draw Mode to reveal/erase fog, then click and drag<br>
+        <small>Use mouse wheel to zoom, drag to pan the map (when Draw Mode is off)</small>
+    </div>
+    
+    <div id="mapContainer">
+        <div id="map"></div>
+        <canvas id="fogCanvas"></canvas>
+        <div class="mode-indicator" id="modeIndicator">DRAWING MODE</div>
+    </div>
+    
+    <div class="controls">
+        <button id="drawModeToggle">🎨 Draw Mode: OFF</button>
+        <button id="eraseModeToggle">🧹 Erase Mode: OFF</button>
+    </div>
+    
+    <div class="stats">
+        <span>Explored: <span id="explored">0%</span></span>
+        <span>Zoom: <span id="zoomLevel">13</span></span>
+        <span>Brush Size: <span id="brushSize">30m</span></span>
+    </div>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
+            crossorigin=""></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    
+    <!-- Firebase Configuration (external file) -->
+    <script src="firebase-config.js"></script>
+    
+    <script>
+        console.log('Starting fog map initialization...');
+        
+        // Check if firebaseConfig is loaded
+        if (typeof firebaseConfig === 'undefined') {
+            console.error('Firebase config not loaded! Make sure firebase-config.js exists and is accessible.');
+            document.getElementById('mapContainer').innerHTML = '<div style="padding: 40px; text-align: center; color: #D28117;"><h3>Configuration Error</h3><p>Firebase configuration not found. Please ensure firebase-config.js is properly configured.</p></div>';
+        } else {
+            console.log('Firebase config loaded successfully');
+            
+            try {
+                // Initialize Firebase (config loaded from firebase-config.js)
+                firebase.initializeApp(firebaseConfig);
+                const database = firebase.database();
+                console.log('Firebase initialized successfully');
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                document.getElementById('mapContainer').innerHTML = '<div style="padding: 40px; text-align: center; color: #c44536;"><h3>Firebase Error</h3><p>' + error.message + '</p></div>';
+            }
+        }
+        
+        class FogOfWarMap {
+            constructor() {
+                this.map = null;
+                this.fogCanvas = null;
+                this.fogCtx = null;
+                this.isDragging = false;
+                this.isDrawingMode = false; // Toggle for draw mode on/off
+                this.isEraseMode = false; // false = reveal fog, true = add fog back
+                this.brushSizeMeters = 7; // brush size in meters
+                this.baseZoom = 13; // reference zoom level for brush size
+                this.isMobile = this.detectMobile();
+                this.totalPixels = 0;
+                this.clearedPixels = 0;
+                
+                // Store cleared areas as geographic coordinates with radius in meters
+                this.clearedAreas = [];
+                
+                // Throttling for smooth performance
+                this.redrawTimeout = null;
+                this.isZooming = false;
+                this.zoomAnimationFrame = null;
+                
+                // Firebase sync
+                this.firebaseRef = database.ref('fogMap/clearedAreas');
+                this.saveTimeout = null;
+                this.isLoadingFromFirebase = false;
+                
+                this.init();
+            }
+            
+            init() {
+                // Initialize the map
+                this.initMap();
+                
+                // Initialize fog canvas
+                this.initFogCanvas();
+                
+                // Setup event listeners
+                this.setupEventListeners();
+                
+                // Initial render
+                this.redrawFog();
+                this.updateZoomDisplay();
+                this.setupFirebaseSync();
+            }
+            
+            initMap() {
+                // Create map centered on specified location
+                this.map = L.map('map', {
+                    zoomControl: true,
+                    scrollWheelZoom: true,
+                    doubleClickZoom: true,
+                    boxZoom: true,
+                    keyboard: true,
+                    dragging: true,
+                    touchZoom: true
+                }).setView([51.28756723697658, -0.8127606938537069], 13);
+                
+                // Add OpenStreetMap tiles
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors',
+                    maxZoom: 19
+                }).addTo(this.map);
+                
+                // Redraw fog when map changes - use requestAnimationFrame for smooth updates
+                this.map.on('move zoom viewreset', () => {
+                    this.throttledRedraw();
+                    this.updateZoomDisplay();
+                });
+                
+                // Handle zoom start - begin continuous redraw loop
+                this.map.on('zoomstart', () => {
+                    this.isZooming = true;
+                    this.startZoomAnimation();
+                });
+                
+                // Handle zoom end - stop continuous redraw loop
+                this.map.on('zoomend', () => {
+                    this.isZooming = false;
+                    if (this.zoomAnimationFrame) {
+                        cancelAnimationFrame(this.zoomAnimationFrame);
+                        this.zoomAnimationFrame = null;
+                    }
+                    this.resizeFogCanvas();
+                    this.redrawFog();
+                    this.updateZoomDisplay();
+                });
+                
+                this.map.on('moveend', () => {
+                    this.resizeFogCanvas();
+                    this.redrawFog();
+                    this.updateZoomDisplay();
+                });
+            }
+            
+            initFogCanvas() {
+                this.fogCanvas = document.getElementById('fogCanvas');
+                this.fogCtx = this.fogCanvas.getContext('2d');
+                this.resizeFogCanvas();
+            }
+            
+            resizeFogCanvas() {
+                const container = document.getElementById('mapContainer');
+                const rect = container.getBoundingClientRect();
+                
+                this.fogCanvas.width = rect.width;
+                this.fogCanvas.height = rect.height;
+                this.fogCanvas.style.width = rect.width + 'px';
+                this.fogCanvas.style.height = rect.height + 'px';
+                
+                this.totalPixels = this.fogCanvas.width * this.fogCanvas.height;
+                
+                // Redraw fog after resize
+                if (this.fogCtx) {
+                    this.redrawFog();
+                }
+            }
+            
+            setupEventListeners() {
+                // Mouse events (only work when in drawing mode)
+                this.fogCanvas.addEventListener('mousedown', (e) => {
+                    if (this.isDrawingMode) {
+                        this.isDragging = true;
+                        this.clearFogAt(e);
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                });
+                
+                this.fogCanvas.addEventListener('mousemove', (e) => {
+                    if (this.isDragging && this.isDrawingMode) {
+                        this.clearFogAt(e);
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                });
+                
+                this.fogCanvas.addEventListener('mouseup', (e) => {
+                    if (this.isDrawingMode) {
+                        this.isDragging = false;
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                });
+                
+                this.fogCanvas.addEventListener('mouseleave', () => {
+                    this.isDragging = false;
+                });
+                
+                // Touch events for mobile (only work when in drawing mode)
+                this.fogCanvas.addEventListener('touchstart', (e) => {
+                    if (this.isDrawingMode) {
+                        this.isDragging = true;
+                        
+                        const touch = e.touches[0];
+                        const mouseEvent = new MouseEvent('mousedown', {
+                            clientX: touch.clientX,
+                            clientY: touch.clientY
+                        });
+                        this.clearFogAt(mouseEvent);
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                });
+                
+                this.fogCanvas.addEventListener('touchmove', (e) => {
+                    if (this.isDragging && this.isDrawingMode) {
+                        const touch = e.touches[0];
+                        const mouseEvent = new MouseEvent('mousemove', {
+                            clientX: touch.clientX,
+                            clientY: touch.clientY
+                        });
+                        this.clearFogAt(mouseEvent);
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                });
+                
+                this.fogCanvas.addEventListener('touchend', (e) => {
+                    if (this.isDrawingMode) {
+                        this.isDragging = false;
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                });
+                
+                // Button events
+                document.getElementById('drawModeToggle').addEventListener('click', () => {
+                    this.toggleDrawMode();
+                });
+                
+                document.getElementById('eraseModeToggle').addEventListener('click', () => {
+                    this.toggleEraseMode();
+                });
+                
+                // Window resize
+                window.addEventListener('resize', () => {
+                    setTimeout(() => this.resizeFogCanvas(), 100);
+                });
+            }
+            
+            clearFogAt(e) {
+                const rect = this.fogCanvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Convert pixel coordinates to map coordinates
+                const containerPoint = L.point(x, y);
+                const latLng = this.map.containerPointToLatLng(containerPoint);
+                
+                if (this.isEraseMode) {
+                    // Erase mode: remove nearby cleared areas
+                    this.clearedAreas = this.clearedAreas.filter(area => {
+                        const areaLatLng = L.latLng(area.lat, area.lng);
+                        const distance = latLng.distanceTo(areaLatLng);
+                        return distance > this.brushSizeMeters * 1.4; // Overlap threshold
+                    });
+                } else {
+                    // Reveal mode: add new cleared area (just store lat/lng)
+                    this.clearedAreas.push({
+                        lat: latLng.lat,
+                        lng: latLng.lng
+                    });
+                }
+                
+                // Redraw the fog with the changes
+                this.redrawFog();
+                this.updateStats();
+                
+                // Save to Firebase (throttled)
+                this.saveToFirebase();
+            }
+            
+            getMetersPerPixel() {
+                // Approximate meters per pixel at current zoom level
+                // This is a rough calculation for mid-latitudes
+                const zoom = this.map.getZoom();
+                const lat = this.map.getCenter().lat;
+                const metersPerPixel = 40075016.686 * Math.abs(Math.cos(lat * Math.PI / 180)) / Math.pow(2, zoom + 8);
+                return metersPerPixel;
+            }
+            
+            throttledRedraw() {
+                // Use requestAnimationFrame for smooth 60fps updates
+                if (this.redrawTimeout) {
+                    return; // Already scheduled
+                }
+                
+                this.redrawTimeout = requestAnimationFrame(() => {
+                    this.redrawFog();
+                    this.redrawTimeout = null;
+                });
+            }
+            
+            updateZoomDisplay() {
+                const zoom = this.map.getZoom();
+                document.getElementById('zoomLevel').textContent = zoom.toFixed(1);
+            }
+            
+            startZoomAnimation() {
+                if (!this.isZooming) return;
+                
+                // Continuously redraw during zoom animation
+                this.redrawFog();
+                this.updateZoomDisplay();
+                
+                this.zoomAnimationFrame = requestAnimationFrame(() => {
+                    this.startZoomAnimation();
+                });
+            }
+            
+            detectMobile() {
+                return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                       (navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
+            }
+            
+            toggleDrawMode() {
+                this.isDrawingMode = !this.isDrawingMode;
+                const button = document.getElementById('drawModeToggle');
+                
+                if (this.isDrawingMode) {
+                    button.textContent = '🎨 Draw Mode: ON';
+                    button.classList.add('draw-mode-on');
+                    this.fogCanvas.classList.add('drawing-mode');
+                    document.getElementById('modeIndicator').classList.add('active');
+                } else {
+                    button.textContent = '🎨 Draw Mode: OFF';
+                    button.classList.remove('draw-mode-on');
+                    this.fogCanvas.classList.remove('drawing-mode');
+                    document.getElementById('modeIndicator').classList.remove('active');
+                    this.isDragging = false; // Stop any current drawing
+                }
+            }
+            
+            toggleEraseMode() {
+                this.isEraseMode = !this.isEraseMode;
+                const button = document.getElementById('eraseModeToggle');
+                
+                if (this.isEraseMode) {
+                    button.textContent = '🧹 Erase Mode: ON';
+                    button.classList.add('erase-mode-on');
+                } else {
+                    button.textContent = '🧹 Erase Mode: OFF';
+                    button.classList.remove('erase-mode-on');
+                }
+            }
+            
+            setupFirebaseSync() {
+                // Listen for changes from other users
+                this.firebaseRef.on('value', (snapshot) => {
+                    if (this.isLoadingFromFirebase) return;
+                    
+                    const data = snapshot.val();
+                    if (data && Array.isArray(data)) {
+                        this.clearedAreas = data;
+                        this.redrawFog();
+                        this.updateStats();
+                        console.log('Loaded', data.length, 'cleared areas from Firebase');
+                    }
+                });
+                
+                // Handle connection status
+                const connectedRef = database.ref('.info/connected');
+                connectedRef.on('value', (snapshot) => {
+                    if (snapshot.val() === true) {
+                        console.log('Connected to Firebase');
+                    } else {
+                        console.log('Disconnected from Firebase');
+                    }
+                });
+            }
+            
+            saveToFirebase() {
+                // Throttle saves to avoid excessive writes
+                if (this.saveTimeout) {
+                    clearTimeout(this.saveTimeout);
+                }
+                
+                this.saveTimeout = setTimeout(() => {
+                    this.isLoadingFromFirebase = true;
+                    
+                    this.firebaseRef.set(this.clearedAreas)
+                        .then(() => {
+                            console.log('Saved', this.clearedAreas.length, 'cleared areas to Firebase');
+                        })
+                        .catch((error) => {
+                            console.error('Firebase save error:', error);
+                        })
+                        .finally(() => {
+                            this.isLoadingFromFirebase = false;
+                        });
+                }, 1000); // Save 1 second after last change
+            }
+            
+            drawFog() {
+                // Fill entire canvas with semi-transparent black fog
+                this.fogCtx.globalCompositeOperation = 'source-over';
+                this.fogCtx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+                this.fogCtx.fillRect(0, 0, this.fogCanvas.width, this.fogCanvas.height);
+            }
+            
+            redrawFog() {
+                // Skip redraw if canvas isn't ready
+                if (!this.fogCtx || !this.fogCanvas.width || !this.fogCanvas.height) {
+                    return;
+                }
+                
+                // Clear and redraw the entire fog layer
+                this.fogCtx.clearRect(0, 0, this.fogCanvas.width, this.fogCanvas.height);
+                this.drawFog();
+                
+                // Early exit if no cleared areas
+                if (this.clearedAreas.length === 0) {
+                    return;
+                }
+                
+                // Redraw all cleared areas based on current map view
+                this.fogCtx.globalCompositeOperation = 'destination-out';
+                
+                const metersPerPixel = this.getMetersPerPixel();
+                const canvasWidth = this.fogCanvas.width;
+                const canvasHeight = this.fogCanvas.height;
+                
+                for (const area of this.clearedAreas) {
+                    // Convert lat/lng back to pixel coordinates
+                    const latLng = L.latLng(area.lat, area.lng);
+                    const point = this.map.latLngToContainerPoint(latLng);
+                    
+                    // Use current brush size from code (not stored radius)
+                    const radiusInPixels = this.brushSizeMeters / metersPerPixel;
+                    
+                    // Only draw if the point is visible on screen (with buffer)
+                    if (point.x >= -radiusInPixels && point.x <= canvasWidth + radiusInPixels &&
+                        point.y >= -radiusInPixels && point.y <= canvasHeight + radiusInPixels) {
+                        
+                        this.fogCtx.beginPath();
+                        this.fogCtx.arc(point.x, point.y, radiusInPixels, 0, Math.PI * 2);
+                        this.fogCtx.fill();
+                    }
+                }
+                
+                // Reset composite operation
+                this.fogCtx.globalCompositeOperation = 'source-over';
+            }
+            
+            
+            updateStats() {
+                // Calculate approximate cleared area
+                const imageData = this.fogCtx.getImageData(0, 0, this.fogCanvas.width, this.fogCanvas.height);
+                const data = imageData.data;
+                let clearedPixels = 0;
+                
+                // Count pixels that are not fully opaque (cleared areas)
+                for (let i = 3; i < data.length; i += 4) {
+                    if (data[i] < 200) { // Alpha channel less than ~80%
+                        clearedPixels++;
+                    }
+                }
+                
+                const percent = Math.floor((clearedPixels / this.totalPixels) * 100);
+                document.getElementById('explored').textContent = percent + '%';
+            }
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            console.log('Initializing Fog of War Map...');
+            const fogMap = new FogOfWarMap();
+            window.fogMap = fogMap;
+        });
+    </script>
+</body>
+</html>
+
