@@ -213,7 +213,7 @@
     <script>
         console.log('Starting fog map initialization...');
         
-        // TEMPORARY: Inline config for debugging (REMOVE AFTER TESTING!)
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCzAPWP0EenOexGzI7yWHGBYxD_7Fasyk0",
             authDomain: "project-enra.firebaseapp.com",
@@ -224,10 +224,13 @@
             appId: "1:244726525511:web:35979d9f414324ef354b62"
         };
         
+        // Global database variable
+        let database;
+        
         try {
             // Initialize Firebase
             firebase.initializeApp(firebaseConfig);
-            const database = firebase.database();
+            database = firebase.database();
             console.log('Firebase initialized successfully');
         } catch (error) {
             console.error('Firebase initialization error:', error);
