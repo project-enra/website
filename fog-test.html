@@ -210,28 +210,28 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     
-    <!-- Firebase Configuration (external file) -->
-    <script src="firebase-config.js"></script>
-    
     <script>
         console.log('Starting fog map initialization...');
         
-        // Check if firebaseConfig is loaded
-        if (typeof firebaseConfig === 'undefined') {
-            console.error('Firebase config not loaded! Make sure firebase-config.js exists and is accessible.');
-            document.getElementById('mapContainer').innerHTML = '<div style="padding: 40px; text-align: center; color: #D28117;"><h3>Configuration Error</h3><p>Firebase configuration not found. Please ensure firebase-config.js is properly configured.</p></div>';
-        } else {
-            console.log('Firebase config loaded successfully');
-            
-            try {
-                // Initialize Firebase (config loaded from firebase-config.js)
-                firebase.initializeApp(firebaseConfig);
-                const database = firebase.database();
-                console.log('Firebase initialized successfully');
-            } catch (error) {
-                console.error('Firebase initialization error:', error);
-                document.getElementById('mapContainer').innerHTML = '<div style="padding: 40px; text-align: center; color: #c44536;"><h3>Firebase Error</h3><p>' + error.message + '</p></div>';
-            }
+        // TEMPORARY: Inline config for debugging (REMOVE AFTER TESTING!)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCzAPWP0EenOexGzI7yWHGBYxD_7Fasyk0",
+            authDomain: "project-enra.firebaseapp.com",
+            databaseURL: "https://project-enra-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "project-enra",
+            storageBucket: "project-enra.firebasestorage.app",
+            messagingSenderId: "244726525511",
+            appId: "1:244726525511:web:35979d9f414324ef354b62"
+        };
+        
+        try {
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            const database = firebase.database();
+            console.log('Firebase initialized successfully');
+        } catch (error) {
+            console.error('Firebase initialization error:', error);
+            document.getElementById('mapContainer').innerHTML = '<div style="padding: 40px; text-align: center; color: #c44536;"><h3>Firebase Error</h3><p>' + error.message + '</p></div>';
         }
         
         class FogOfWarMap {
