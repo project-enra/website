@@ -145,6 +145,47 @@
             white-space: nowrap;
         }
         
+        .opacity-control {
+            text-align: center;
+            margin: 15px 20px;
+            color: #b8b3a3;
+        }
+        
+        .opacity-control label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .opacity-slider {
+            width: 200px;
+            height: 6px;
+            border-radius: 3px;
+            background: #333;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .opacity-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #D28117;
+            cursor: pointer;
+            border: 2px solid #0a0a0a;
+        }
+        
+        .opacity-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #D28117;
+            cursor: pointer;
+            border: 2px solid #0a0a0a;
+        }
+        
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -168,6 +209,14 @@
             .stats {
                 font-size: 14px;
                 margin: 15px 5px;
+            }
+            
+            .opacity-control {
+                margin: 15px 5px;
+            }
+            
+            .opacity-slider {
+                width: 150px;
             }
             
             .instructions {
@@ -198,7 +247,12 @@
     <div class="stats">
         <span>Explored: <span id="explored">0%</span></span>
         <span>Zoom: <span id="zoomLevel">13</span></span>
-        <span>Brush Size: <span id="brushSize">30m</span></span>
+        <span>Brush Size: <span id="brushSize">7m</span></span>
+    </div>
+    
+    <div class="opacity-control">
+        <label for="fogOpacity">Fog Opacity: <span id="opacityValue">85%</span></label>
+        <input type="range" id="fogOpacity" min="10" max="95" value="85" class="opacity-slider">
     </div>
 
     <!-- Leaflet JavaScript -->
@@ -209,7 +263,7 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    
+
     <script>
         console.log('Starting fog map initialization...');
         
@@ -248,6 +302,7 @@
                 this.brushSizeMeters = 7; // brush size in meters
                 this.baseZoom = 13; // reference zoom level for brush size
                 this.isMobile = this.detectMobile();
+                this.fogOpacity = 0.85; // default fog opacity (85%)
                 this.totalPixels = 0;
                 this.clearedPixels = 0;
                 
@@ -359,7 +414,7 @@
                 // Mouse events (only work when in drawing mode)
                 this.fogCanvas.addEventListener('mousedown', (e) => {
                     if (this.isDrawingMode) {
-                        this.isDragging = true;
+                    this.isDragging = true;
                         this.clearFogAt(e);
                         e.preventDefault();
                         e.stopPropagation();
@@ -430,6 +485,11 @@
                 
                 document.getElementById('eraseModeToggle').addEventListener('click', () => {
                     this.toggleEraseMode();
+                });
+                
+                // Opacity slider
+                document.getElementById('fogOpacity').addEventListener('input', (e) => {
+                    this.updateFogOpacity(e.target.value);
                 });
                 
                 // Window resize
@@ -544,6 +604,17 @@
                 }
             }
             
+            updateFogOpacity(value) {
+                // Convert slider value (10-95) to opacity (0.1-0.95)
+                this.fogOpacity = value / 100;
+                
+                // Update display
+                document.getElementById('opacityValue').textContent = value + '%';
+                
+                // Redraw fog with new opacity
+                this.redrawFog();
+            }
+            
             setupFirebaseSync() {
                 // Listen for changes from other users
                 this.firebaseRef.on('value', (snapshot) => {
@@ -592,9 +663,9 @@
             }
             
             drawFog() {
-                // Fill entire canvas with semi-transparent black fog
+                // Fill entire canvas with semi-transparent black fog using current opacity
                 this.fogCtx.globalCompositeOperation = 'source-over';
-                this.fogCtx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+                this.fogCtx.fillStyle = `rgba(0, 0, 0, ${this.fogOpacity})`;
                 this.fogCtx.fillRect(0, 0, this.fogCanvas.width, this.fogCanvas.height);
             }
             
