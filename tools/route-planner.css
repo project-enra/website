@@ -5,6 +5,90 @@
     min-height: 100vh;
     background: #0a0a0a;
     position: relative;
+    overflow: hidden;
+}
+
+/* CTA Banner */
+.cta-banner {
+    background: linear-gradient(135deg, rgba(210, 129, 23, 0.95) 0%, rgba(180, 100, 20, 0.95) 100%);
+    border-bottom: 2px solid rgba(255, 107, 53, 0.6);
+    padding: 12px 20px;
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 4px 20px rgba(210, 129, 23, 0.3);
+    animation: ctaSlideIn 0.5s ease-out;
+}
+
+@keyframes ctaSlideIn {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.cta-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.cta-text {
+    color: #0a0a0a;
+    font-size: 0.95rem;
+    font-family: 'IM Fell English', serif;
+}
+
+.cta-text strong {
+    font-weight: bold;
+    color: #000;
+}
+
+.cta-btn {
+    background: #0a0a0a;
+    color: #D28117;
+    padding: 8px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: 'IM Fell English', serif;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 2px solid #0a0a0a;
+    white-space: nowrap;
+}
+
+.cta-btn:hover {
+    background: #1a1a1a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.cta-close {
+    background: none;
+    border: none;
+    color: #0a0a0a;
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 8px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.cta-close:hover {
+    color: #000;
+    transform: scale(1.2);
+}
+
+.cta-banner.hidden {
+    display: none;
 }
 
 /* Mystical Background Effect */
@@ -76,9 +160,13 @@
 /* Main Planner Container */
 .planner-container {
     display: flex;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 80px - 48px); /* Account for CTA banner */
     position: relative;
     z-index: 1;
+}
+
+.cta-banner.hidden + .planner-container {
+    height: calc(100vh - 80px); /* Full height when CTA is hidden */
 }
 
 /* Side Panel */
@@ -396,6 +484,10 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+}
+
+.control-buttons button:first-child {
+    grid-column: 1 / -1; /* Share button spans full width */
 }
 
 .control-btn {

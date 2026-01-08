@@ -119,7 +119,11 @@
         initMap();
         initControls();
         initMobileFeatures();
+        initCTABanner();
         getUserLocation();
+        
+        // Load route from URL if present
+        loadRouteFromURL();
     }
 
     // Initialize the map
@@ -170,6 +174,9 @@
 
     // Initialize control buttons
     function initControls() {
+        // Share route button
+        document.getElementById('shareRouteBtn').addEventListener('click', shareRoute);
+        
         // Clear route button
         document.getElementById('clearRouteBtn').addEventListener('click', clearRoute);
 
@@ -275,6 +282,7 @@
         }
 
         updateUI();
+        updateURLHash(); // Update URL with new waypoint
     }
 
     // Handle waypoint drag
@@ -636,6 +644,117 @@
         return degrees * Math.PI / 180;
     }
 
+    // Initialize CTA Banner
+    function initCTABanner() {
+        const ctaClose = document.getElementById('ctaClose');
+        const ctaBanner = document.getElementById('ctaBanner');
+        
+        // Check if user has closed banner before
+        const bannerClosed = localStorage.getItem('veilglassCTAClosed');
+        if (bannerClosed === 'true') {
+            ctaBanner.classList.add('hidden');
+        }
+        
+        // Close button handler
+        if (ctaClose) {
+            ctaClose.addEventListener('click', () => {
+                ctaBanner.classList.add('hidden');
+                localStorage.setItem('veilglassCTAClosed', 'true');
+            });
+        }
+    }
+
+    // Share route - encode waypoints in URL
+    function shareRoute() {
+        if (waypoints.length === 0) {
+            alert('Please create a route first before sharing!');
+            return;
+        }
+
+        // Encode waypoints and settings into URL hash
+        const routeData = {
+            w: waypoints.map(wp => [wp.lat.toFixed(6), wp.lng.toFixed(6)]), // waypoints
+            m: routeMode, // mode
+            u: currentUnits // units
+        };
+
+        // Compress to URL-safe string
+        const encoded = btoa(JSON.stringify(routeData));
+        const shareURL = `${window.location.origin}${window.location.pathname}#route=${encoded}`;
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(shareURL).then(() => {
+            // Show success message
+            const btn = document.getElementById('shareRouteBtn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<span class="btn-icon">✓</span><span class="btn-label">Link Copied!</span>';
+            btn.style.background = 'rgba(76, 175, 80, 0.3)';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.style.background = '';
+            }, 2000);
+
+            console.log('Shareable URL:', shareURL);
+        }).catch(err => {
+            console.error('Failed to copy:', err);
+            // Fallback: show URL in prompt
+            prompt('Copy this link to share your route:', shareURL);
+        });
+    }
+
+    // Load route from URL hash
+    function loadRouteFromURL() {
+        const hash = window.location.hash;
+        if (!hash || !hash.includes('route=')) return;
+
+        try {
+            const encoded = hash.split('route=')[1];
+            const decoded = JSON.parse(atob(encoded));
+
+            // Restore waypoints
+            if (decoded.w && Array.isArray(decoded.w)) {
+                decoded.w.forEach(([lat, lng]) => {
+                    addWaypoint(parseFloat(lat), parseFloat(lng));
+                });
+
+                // Restore settings
+                if (decoded.m) {
+                    routeMode = decoded.m;
+                    document.querySelector(`input[name="routeMode"][value="${decoded.m}"]`).checked = true;
+                }
+                if (decoded.u) {
+                    currentUnits = decoded.u;
+                    document.querySelector(`input[name="units"][value="${decoded.u}"]`).checked = true;
+                }
+
+                console.log('Route loaded from URL:', decoded.w.length, 'waypoints');
+            }
+        } catch (error) {
+            console.error('Failed to load route from URL:', error);
+        }
+    }
+
+    // Update URL hash when route changes
+    function updateURLHash() {
+        if (waypoints.length === 0) {
+            // Clear hash if no waypoints
+            if (window.location.hash) {
+                history.replaceState(null, '', window.location.pathname);
+            }
+            return;
+        }
+
+        const routeData = {
+            w: waypoints.map(wp => [wp.lat.toFixed(6), wp.lng.toFixed(6)]),
+            m: routeMode,
+            u: currentUnits
+        };
+
+        const encoded = btoa(JSON.stringify(routeData));
+        history.replaceState(null, '', `#route=${encoded}`);
+    }
+
     // Clear entire route
     function clearRoute() {
         // Remove all markers
@@ -656,6 +775,7 @@
         waypoints = [];
 
         updateUI();
+        updateURLHash(); // Clear URL hash
     }
 
     // Undo last waypoint
@@ -687,6 +807,7 @@
         }
 
         updateUI();
+        updateURLHash(); // Update URL
     }
 
     // Change base map
