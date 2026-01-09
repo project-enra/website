@@ -78,142 +78,132 @@
 
         <!-- Main Planner Container -->
         <div class="planner-container">
-            <!-- Side Panel -->
-            <div class="side-panel" id="sidePanel">
-                <!-- Route Mode Toggle - Horizontal at Top -->
-                <div class="panel-section">
-                    <div class="route-mode-horizontal">
-                        <label>
-                            <input type="radio" name="routeMode" value="auto" checked>
-                            <span>Auto-snap</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="routeMode" value="direct">
-                            <span>Direct line</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Base Map Selector -->
-                <div class="panel-section">
-                    <label for="baseMapSelect" class="section-label">Modern Map</label>
-                    <select id="baseMapSelect" class="map-select">
-                        <option value="openstreetmap">OpenStreetMap</option>
-                        <option value="opentopomap">OpenTopoMap (Hiking)</option>
-                        <option value="cyclosm">CyclOSM (Cycling)</option>
-                        <option value="satellite">Satellite</option>
-                    </select>
-                </div>
-
-                <!-- Control Buttons -->
-                <div class="panel-section">
-                    <div class="control-buttons">
-                        <button class="control-btn" id="shareRouteBtn" title="Share this route">
-                            <span class="btn-icon">🔗</span>
-                            <span class="btn-label">Share Route</span>
-                        </button>
-                        <button class="control-btn" id="clearRouteBtn" title="Clear entire route">
-                            <span class="btn-icon">🗑️</span>
-                            <span class="btn-label">Clear Route</span>
-                        </button>
-                        <button class="control-btn" id="undoBtn" title="Remove last waypoint">
-                            <span class="btn-icon">↩️</span>
-                            <span class="btn-label">Undo Last</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Historical Overlay Controls - PROMINENT FEATURE -->
-                <div class="panel-section highlight-section">
-                    <h3>🕰️ Historical Overlay</h3>
-                    <div class="overlay-controls">
-                        <div class="toggle-container">
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="overlayToggle">
-                                <span class="toggle-slider"></span>
-                            </label>
-                            <span class="toggle-label">Show Historical Map</span>
-                        </div>
-                        
-                        <div class="opacity-control" id="opacityControl" style="display: none;">
-                            <label for="opacitySlider">Overlay Opacity</label>
-                            <input type="range" id="opacitySlider" min="0" max="100" value="70" step="5">
-                            <span class="opacity-value" id="opacityValue">70%</span>
-                        </div>
-
-                        <div class="map-selector" id="mapSelector" style="display: none;">
-                            <label for="historicalMapSelect">Historical Map Layer</label>
-                            <select id="historicalMapSelect">
-                                <option value="os-6inch-1st-gb">OS 6-inch Scotland 1888-1913</option>
-                                <option value="os-25inch-gb">OS 25-inch Scotland 1892-1914</option>
-                                <option value="os-1inch-gb">OS One-Inch England & Wales 1885-1900</option>
-                                <option value="roy-lowlands">Roy Military Survey 1747-1755</option>
-                            </select>
-                        </div>
-
-                        <div class="map-info" id="mapInfo" style="display: none;">
-                            <p class="info-text">
-                                <strong>Historical maps</strong> courtesy of the National Library of Scotland. 
-                                View your planned route as it would have appeared centuries ago.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Guide - Compact -->
-                <div class="panel-section compact-section">
-                    <h3>Quick Guide</h3>
-                    <div class="instructions compact-instructions">
-                        <p>🎯 Click map to add waypoints</p>
-                        <p>🕰️ Toggle historical overlay above</p>
-                        <p>👆 Drag waypoints to adjust</p>
-                    </div>
-                </div>
-
-                <!-- Journey Details - Horizontal at Bottom -->
-                <div class="panel-section journey-bottom">
-                    <div class="journey-stats-horizontal">
-                        <div class="stat-item-horizontal">
-                            <span class="stat-value" id="totalDistance">0 km</span>
-                            <span class="stat-label">Distance</span>
-                        </div>
-                        <div class="stat-item-horizontal">
-                            <span class="stat-value" id="waypointCount">0</span>
-                            <span class="stat-label">Waypoints</span>
-                        </div>
-                        <div class="stat-item-horizontal">
-                            <span class="stat-value" id="walkingTime">0 min</span>
-                            <span class="stat-label">Est. Time</span>
-                        </div>
-                    </div>
-                    <div class="unit-toggle-horizontal">
-                        <label>
-                            <input type="radio" name="units" value="km" checked>
-                            <span>km</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="units" value="mi">
-                            <span>mi</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
             <!-- Map Container -->
             <div class="map-container">
                 <div id="map"></div>
                 
-                <!-- Map Overlay UI Elements -->
-                <div class="map-overlay-ui">
-                    <button class="panel-toggle-btn" id="panelToggleBtn" title="Toggle side panel">
-                        <span>☰</span>
+                <!-- Floating Map Controls (Top Left) -->
+                <div class="floating-map-controls" id="floatingMapControls">
+                    <button class="panel-collapse-btn" id="mapControlsToggle" title="Toggle map controls">
+                        <span class="collapse-icon">🗺️</span>
                     </button>
-                </div>
+                    <div class="panel-content">
+                    <!-- Modern Map Selector -->
+                    <div class="control-group">
+                        <label class="control-label">Modern Map</label>
+                        <select id="baseMapSelect" class="map-select-compact">
+                            <option value="openstreetmap">OpenStreetMap</option>
+                            <option value="opentopomap">OpenTopoMap</option>
+                            <option value="cyclosm">CyclOSM</option>
+                            <option value="satellite">Satellite</option>
+                        </select>
+                    </div>
 
+                    <!-- Historical Overlay -->
+                    <div class="control-group historical-group">
+                        <label class="control-label-special">🕰️ Historical Overlay</label>
+                        <label class="checkbox-compact">
+                            <input type="checkbox" id="overlayToggle">
+                            <span>Show Overlay</span>
+                        </label>
+                        
+                        <div id="opacityControl" style="display: none;">
+                            <label class="control-label-small">Opacity</label>
+                            <input type="range" id="opacitySlider" min="0" max="100" value="70" step="5" class="range-compact">
+                            <span class="opacity-value-compact" id="opacityValue">70%</span>
+                        </div>
+
+                        <div id="mapSelector" style="display: none;">
+                            <label class="control-label-small">Historical Layer</label>
+                            <select id="historicalMapSelect" class="map-select-compact">
+                                <option value="os-6inch-1st-gb">OS 6" Scotland 1888-1913</option>
+                                <option value="os-25inch-gb">OS 25" Scotland 1892-1914</option>
+                                <option value="os-1inch-gb">OS 1" England 1885-1900</option>
+                                <option value="roy-lowlands">Roy Military 1747-1755</option>
+                            </select>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                
+                <!-- Floating Route Controls (Top Right) -->
+                <div class="floating-route-controls" id="floatingRouteControls">
+                    <button class="panel-collapse-btn" id="routeControlsToggle" title="Toggle route controls">
+                        <span class="collapse-icon">🛠️</span>
+                    </button>
+                    <div class="panel-content">
+                    <!-- Route Mode Toggle -->
+                    <div class="control-group">
+                        <div class="route-mode-compact">
+                            <label>
+                                <input type="radio" name="routeModeFloat" value="auto" checked>
+                                <span>Auto</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="routeModeFloat" value="direct">
+                                <span>Direct</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Route Style -->
+                    <div class="control-group">
+                        <label class="control-label">Color</label>
+                        <input type="color" id="routeColorFloat" value="#FF6B35" class="color-input-compact">
+                        <label class="control-label">Width</label>
+                        <input type="range" id="routeWidthFloat" min="4" max="12" value="6" step="1" class="range-compact">
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="control-group">
+                        <button class="action-btn-compact primary" id="shareRouteBtnFloat" title="Share">
+                            🔗 Share
+                        </button>
+                        <div class="button-row-compact">
+                            <button class="action-btn-compact small" id="clearRouteBtnFloat" title="Clear">🗑️</button>
+                            <button class="action-btn-compact small" id="undoBtnFloat" title="Undo">↩️</button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Guide -->
+                    <div class="control-group guide-text">
+                        💡 Click map to add waypoints
+                    </div>
+                    </div>
+                </div>
+                
                 <!-- Loading Indicator -->
                 <div class="loading-indicator" id="loadingIndicator" style="display: none;">
                     <div class="spinner"></div>
                     <span>Plotting route...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Stats Bar -->
+        <div class="bottom-stats-bar">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-value" id="waypointCount">0</span>
+                    <span class="stat-label">Waypoints</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="walkingTime">0 min</span>
+                    <span class="stat-label">Est. Time</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="totalDistance">0 mi</span>
+                    <!-- <span class="stat-label">Distance</span> -->
+                </div>
+                <div class="unit-toggle">
+                    <label>
+                        <input type="radio" name="units" value="km">
+                        <span>km</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="units" value="mi" checked>
+                        <span>mi</span>
+                    </label>
                 </div>
             </div>
         </div>

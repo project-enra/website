@@ -5,16 +5,19 @@
     min-height: 100vh;
     background: #0a0a0a;
     position: relative;
-    overflow: hidden;
+    overflow: visible; /* Changed from hidden to show fixed CTA banner */
 }
 
 /* CTA Banner */
 .cta-banner {
     background: linear-gradient(135deg, rgba(210, 129, 23, 0.95) 0%, rgba(180, 100, 20, 0.95) 100%);
     border-bottom: 2px solid rgba(255, 107, 53, 0.6);
-    padding: 12px 20px;
-    position: relative;
-    z-index: 10;
+    padding: 10px 20px;
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    z-index: 1001;
     box-shadow: 0 4px 20px rgba(210, 129, 23, 0.3);
     animation: ctaSlideIn 0.5s ease-out;
 }
@@ -73,18 +76,22 @@
 .cta-close {
     background: none;
     border: none;
-    color: #0a0a0a;
+    color: rgba(0, 0, 0, 0.7);
     font-size: 1.8rem;
     line-height: 1;
     cursor: pointer;
     padding: 0 8px;
     transition: all 0.3s ease;
     font-weight: bold;
+    z-index: 10;
+    position: relative;
+    pointer-events: auto;
 }
 
 .cta-close:hover {
     color: #000;
     transform: scale(1.2);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .cta-banner.hidden {
@@ -160,7 +167,7 @@
 /* Main Planner Container */
 .planner-container {
     display: flex;
-    height: calc(100vh - 80px - 48px); /* Account for CTA banner */
+    height: calc(100vh - 80px - 42px); /* Header + CTA only, no stats bar */
     position: relative;
     z-index: 1;
 }
@@ -169,18 +176,9 @@
     height: calc(100vh - 80px); /* Full height when CTA is hidden */
 }
 
-/* Side Panel */
+/* Side Panel - Hidden (replaced by floating controls) */
 .side-panel {
-    width: 320px;
-    background: linear-gradient(135deg, rgba(15, 12, 10, 0.98) 0%, rgba(25, 20, 15, 0.98) 100%);
-    border-right: 2px solid rgba(210, 129, 23, 0.3);
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
-    overflow-y: auto;
-    padding: 15px;
-    transition: transform 0.3s ease;
-    position: relative;
-    display: flex;
-    flex-direction: column;
+    display: none;
 }
 
 .side-panel::before {
@@ -776,53 +774,550 @@
     flex: 1;
     position: relative;
     background: #0a0a0a;
+    padding-bottom: 0; /* No padding, map fills container */
 }
 
-/* Compass Rose - Enhanced Visibility */
-.map-container::before {
-    content: '';
+/* Floating Map Controls (Top Left) */
+.floating-map-controls {
     position: absolute;
-    bottom: 20px;
+    top: 20px;
     left: 20px;
-    width: 70px;
-    height: 70px;
-    background: 
-        linear-gradient(0deg, transparent 48%, rgba(255, 107, 53, 0.8) 49%, rgba(255, 107, 53, 0.8) 51%, transparent 52%),
-        linear-gradient(90deg, transparent 48%, rgba(255, 107, 53, 0.8) 49%, rgba(255, 107, 53, 0.8) 51%, transparent 52%);
-    border-radius: 50%;
-    border: 3px solid rgba(255, 107, 53, 0.6);
-    background-color: rgba(0, 0, 0, 0.7);
     z-index: 1000;
-    pointer-events: none;
-    opacity: 0.9;
-    box-shadow: 
-        0 0 20px rgba(255, 107, 53, 0.5),
-        0 0 40px rgba(255, 69, 0, 0.3),
-        inset 0 0 10px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(210, 129, 23, 0.5);
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 200px;
+    max-width: 220px;
+    transition: all 0.3s ease;
 }
 
-.map-container::after {
-    content: 'N';
-    position: absolute;
-    bottom: 93px;
-    left: 51px;
+.floating-map-controls .panel-collapse-btn {
+    display: none; /* Hidden on desktop */
+}
+
+.floating-map-controls .panel-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.floating-map-controls .control-label {
+    font-size: 0.7rem;
+    color: rgba(220, 200, 180, 0.6);
+    font-family: 'IM Fell English', serif;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.floating-map-controls .control-label-special {
+    font-size: 0.85rem;
     color: #FF6B35;
-    font-family: 'Uncial Antiqua', serif;
-    font-size: 1.1rem;
+    font-family: 'IM Fell English', serif;
+    margin-bottom: 6px;
+    display: block;
     font-weight: bold;
-    z-index: 1001;
-    pointer-events: none;
-    text-shadow: 
-        0 0 10px rgba(255, 107, 53, 0.8),
-        0 0 20px rgba(255, 69, 0, 0.6),
-        2px 2px 4px rgba(0, 0, 0, 0.8);
+    text-shadow: 0 0 5px rgba(255, 107, 53, 0.4);
+}
+
+.floating-map-controls .control-label-small {
+    font-size: 0.65rem;
+    color: rgba(220, 200, 180, 0.5);
+    font-family: 'IM Fell English', serif;
+    margin-top: 6px;
+    margin-bottom: 3px;
+    display: block;
+}
+
+.floating-map-controls .map-select-compact {
+    width: 100%;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(210, 129, 23, 0.3);
+    border-radius: 6px;
+    color: #b8b3a3;
+    font-family: 'IM Fell English', serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.floating-map-controls .map-select-compact:hover {
+    border-color: rgba(210, 129, 23, 0.5);
+    background: rgba(210, 129, 23, 0.1);
+}
+
+.floating-map-controls .map-select-compact:focus {
+    outline: none;
+    border-color: rgba(210, 129, 23, 0.6);
+    box-shadow: 0 0 8px rgba(255, 107, 53, 0.3);
+}
+
+.floating-map-controls .historical-group {
+    background: rgba(210, 129, 23, 0.08);
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(210, 129, 23, 0.2);
+}
+
+.floating-map-controls .checkbox-compact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #b8b3a3;
+    font-size: 0.85rem;
+    font-family: 'IM Fell English', serif;
+    padding: 6px 0;
+}
+
+.floating-map-controls .checkbox-compact input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: #D28117;
+    width: 16px;
+    height: 16px;
+}
+
+.floating-map-controls .checkbox-compact:has(input:checked) span {
+    color: #D28117;
+    font-weight: bold;
+}
+
+.floating-map-controls .range-compact {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(210, 129, 23, 0.2);
+    outline: none;
+    cursor: pointer;
+}
+
+.floating-map-controls .range-compact::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #FF6B35;
+    cursor: pointer;
+    border: 2px solid #FFE5B4;
+    box-shadow: 0 0 8px rgba(255, 107, 53, 0.6);
+}
+
+.floating-map-controls .range-compact::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #FF6B35;
+    cursor: pointer;
+    border: 2px solid #FFE5B4;
+    box-shadow: 0 0 8px rgba(255, 107, 53, 0.6);
+}
+
+.floating-map-controls .opacity-value-compact {
+    font-size: 0.75rem;
+    color: #D28117;
+    font-family: 'IM Fell English', serif;
+    margin-left: 4px;
+    display: inline-block;
+    margin-top: 2px;
+}
+
+/* Floating Route Controls (Top Right) */
+.floating-route-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(210, 129, 23, 0.5);
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 180px;
+    transition: all 0.3s ease;
+}
+
+.floating-route-controls .panel-collapse-btn {
+    display: none; /* Hidden on desktop */
+}
+
+.floating-route-controls .panel-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.floating-route-controls .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(210, 129, 23, 0.2);
+}
+
+.floating-route-controls .control-group:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.floating-route-controls .control-label {
+    font-size: 0.7rem;
+    color: rgba(220, 200, 180, 0.6);
+    font-family: 'IM Fell English', serif;
+    margin-top: 4px;
+}
+
+.floating-route-controls .route-mode-compact {
+    display: flex;
+    gap: 6px;
+}
+
+.floating-route-controls .route-mode-compact label {
+    flex: 1;
+    min-width: 70px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #b8b3a3;
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(210, 129, 23, 0.3);
+    font-family: 'IM Fell English', serif;
+}
+
+.floating-route-controls .route-mode-compact input[type="radio"] {
+    margin-right: 4px;
+    cursor: pointer;
+    accent-color: #D28117;
+}
+
+.floating-route-controls .route-mode-compact input[type="radio"]:checked + span {
+    color: #D28117;
+    font-weight: bold;
+}
+
+.floating-route-controls .route-mode-compact label:has(input:checked) {
+    background: rgba(210, 129, 23, 0.2);
+    border: 1px solid rgba(210, 129, 23, 0.4);
+}
+
+.floating-route-controls .color-input-compact {
+    width: 100%;
+    height: 36px;
+    border: 1px solid rgba(210, 129, 23, 0.3);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.floating-route-controls .range-compact {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(210, 129, 23, 0.2);
+    outline: none;
+    cursor: pointer;
+}
+
+.floating-route-controls .range-compact::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #FF6B35;
+    cursor: pointer;
+    border: 2px solid #FFE5B4;
+    box-shadow: 0 0 8px rgba(255, 107, 53, 0.6);
+}
+
+.floating-route-controls .range-compact::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #FF6B35;
+    cursor: pointer;
+    border: 2px solid #FFE5B4;
+    box-shadow: 0 0 8px rgba(255, 107, 53, 0.6);
+}
+
+.floating-route-controls .action-btn-compact {
+    height: 36px;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(210, 129, 23, 0.3);
+    border-radius: 6px;
+    color: #b8b3a3;
+    font-family: 'IM Fell English', serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.floating-route-controls .action-btn-compact:hover {
+    background: rgba(210, 129, 23, 0.2);
+    border-color: rgba(210, 129, 23, 0.5);
+    color: #D28117;
+    transform: translateY(-1px);
+}
+
+.floating-route-controls .action-btn-compact.primary {
+    background: rgba(210, 129, 23, 0.3);
+    border-color: rgba(210, 129, 23, 0.5);
+    color: #D28117;
+}
+
+.floating-route-controls .action-btn-compact.primary:hover {
+    background: rgba(210, 129, 23, 0.4);
+    box-shadow: 0 0 10px rgba(255, 107, 53, 0.4);
+}
+
+.floating-route-controls .action-btn-compact.small {
+    flex: 1;
+    padding: 6px;
+    font-size: 1rem;
+}
+
+.floating-route-controls .button-row-compact {
+    display: flex;
+    gap: 6px;
+}
+
+.floating-route-controls .checkbox-compact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #b8b3a3;
+    font-size: 0.85rem;
+    font-family: 'IM Fell English', serif;
+    padding: 6px 0;
+}
+
+.floating-route-controls .checkbox-compact input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: #D28117;
+    width: 16px;
+    height: 16px;
+}
+
+.floating-route-controls .checkbox-compact:has(input:checked) span {
+    color: #D28117;
+    font-weight: bold;
+}
+
+.floating-route-controls .guide-text {
+    color: rgba(220, 200, 180, 0.7);
+    font-size: 0.8rem;
+    font-family: 'IM Fell English', serif;
+    text-align: center;
+    font-style: italic;
+    padding: 4px 0;
+    border-bottom: none;
+}
+
+/* Panel Collapse Button Styling */
+.panel-collapse-btn {
+    background: rgba(210, 129, 23, 0.3);
+    border: 1px solid rgba(210, 129, 23, 0.5);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+    padding: 0;
+    margin: 0 auto;
+}
+
+.panel-collapse-btn:hover {
+    background: rgba(210, 129, 23, 0.5);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 107, 53, 0.5);
+}
+
+.panel-collapse-btn .collapse-icon {
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+/* Expanded State (Desktop default) */
+.floating-map-controls.expanded .panel-content,
+.floating-route-controls.expanded .panel-content {
+    display: flex;
+}
+
+/* Collapsed State (Mobile default) */
+.floating-map-controls:not(.expanded) .panel-content,
+.floating-route-controls:not(.expanded) .panel-content {
+    display: none;
+}
+
+.floating-map-controls:not(.expanded),
+.floating-route-controls:not(.expanded) {
+    min-width: auto;
+    max-width: none;
+    width: 56px;
+    padding: 8px;
+}
+
+.floating-map-controls:not(.expanded) .panel-collapse-btn,
+.floating-route-controls:not(.expanded) .panel-collapse-btn {
     opacity: 0.9;
 }
+
+/* Responsive: Mobile Optimization */
+@media (max-width: 768px) {
+    /* Show collapse buttons on mobile */
+    .floating-map-controls .panel-collapse-btn,
+    .floating-route-controls .panel-collapse-btn {
+        display: flex;
+    }
+    
+    /* Default to collapsed on mobile */
+    .floating-map-controls,
+    .floating-route-controls {
+        width: 56px;
+        min-width: auto;
+        padding: 8px;
+        top: 10px;
+    }
+    
+    .floating-map-controls {
+        left: 10px;
+    }
+    
+    .floating-route-controls {
+        right: 10px;
+    }
+    
+    /* When expanded on mobile */
+    .floating-map-controls.expanded {
+        width: auto;
+        min-width: 200px;
+        max-width: calc(100vw - 80px);
+        padding: 12px;
+    }
+    
+    .floating-route-controls.expanded {
+        width: auto;
+        min-width: 180px;
+        max-width: calc(100vw - 80px);
+        padding: 12px;
+    }
+    
+    .floating-map-controls.expanded .panel-content,
+    .floating-route-controls.expanded .panel-content {
+        display: flex;
+    }
+    
+    /* Smaller fonts on mobile */
+    .floating-map-controls .control-label-special {
+        font-size: 0.75rem;
+    }
+    
+    .floating-map-controls .map-select-compact {
+        font-size: 0.75rem;
+        padding: 6px;
+    }
+    
+    .floating-route-controls .route-mode-compact label {
+        min-width: 50px;
+        height: 32px;
+        font-size: 0.7rem;
+        padding: 4px 8px;
+    }
+    
+    .floating-route-controls .action-btn-compact {
+        height: 32px;
+        font-size: 0.75rem;
+        padding: 6px 10px;
+    }
+    
+    .floating-route-controls .guide-text {
+        font-size: 0.7rem;
+    }
+    
+    /* Hide CTA banner on mobile by default */
+    .cta-banner {
+        display: none;
+    }
+    
+    /* Adjust planner container height for mobile */
+    .planner-container {
+        height: calc(100vh - 80px); /* Just header, no CTA */
+    }
+    
+    /* Stack bottom stats vertically on very small screens */
+    @media (max-width: 480px) {
+        .bottom-stats-bar .stats-container {
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .bottom-stats-bar .stat-item {
+            min-width: 80px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+        
+        .bottom-stats-bar .stat-value {
+            font-size: 0.85rem;
+        }
+        
+        .bottom-stats-bar .stat-label {
+            font-size: 0.6rem;
+        }
+        
+        .bottom-stats-bar .unit-toggle {
+            margin-left: 0;
+        }
+        
+        .bottom-stats-bar .unit-toggle label {
+            min-width: 60px;
+            font-size: 0.8rem;
+            padding: 6px 12px;
+        }
+    }
+}
+
+/* Compass Rose - Removed for cleaner map */
 
 #map {
     width: 100%;
     height: 100%;
     background: #0a0a0a;
+    /* Add padding at bottom for controls to not be hidden by stats bar */
+}
+
+/* Leaflet attribution positioning to avoid bottom bar overlap */
+/* Waypoint Circle Markers - Static Glow */
+.waypoint-marker-circle {
+    filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.8));
+}
+
+.leaflet-bottom {
+    bottom: 60px !important; /* Push Leaflet controls above bottom bar */
 }
 
 /* Map Overlay UI */
@@ -926,24 +1421,7 @@
 }
 
 /* Waypoint Markers */
-.waypoint-marker {
-    background: #FF6B35;
-    border: 2px solid #FFE5B4;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    box-shadow: 0 0 15px rgba(255, 107, 53, 0.8), 0 0 30px rgba(255, 69, 0, 0.5);
-    animation: waypointPulse 2s ease-in-out infinite;
-}
-
-@keyframes waypointPulse {
-    0%, 100% {
-        box-shadow: 0 0 15px rgba(255, 107, 53, 0.8), 0 0 30px rgba(255, 69, 0, 0.5);
-    }
-    50% {
-        box-shadow: 0 0 25px rgba(255, 107, 53, 1), 0 0 50px rgba(255, 69, 0, 0.8);
-    }
-}
+/* Waypoint markers now defined below in new features section */
 
 /* Mobile Responsiveness */
 @media (max-width: 1024px) {
@@ -1131,5 +1609,232 @@
 
 button, input[type="range"], select, .toggle-slider {
     transition: all 0.3s ease;
+}
+
+/* === NEW FEATURES - Route Customization & Bottom Stats Bar === */
+
+/* Route Customization */
+.route-customization {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.route-customization label {
+    color: #e8e3d3;
+    font-size: 0.9rem;
+}
+
+.route-customization input[type="color"] {
+    width: 100%;
+    height: 35px;
+    border: 1px solid #D28117;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #1a1a1a;
+}
+
+.route-customization input[type="range"] {
+    width: 100%;
+}
+
+/* Checkbox Label */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: #e8e3d3;
+    font-size: 0.95rem;
+    margin-top: 10px;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Bottom Stats Bar */
+.bottom-stats-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px; /* Keep height for spacing but transparent */
+    background: transparent; /* Remove black background */
+    backdrop-filter: none; /* Remove blur */
+    border-top: none; /* Remove border */
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the stats */
+    pointer-events: none; /* Allow map interaction */
+}
+
+.stats-container {
+    display: flex;
+    align-items: stretch;
+    justify-content: center; /* Center the stats */
+    gap: 15px; /* Tighter gap for centered look */
+    max-width: 1200px;
+    padding: 0 20px;
+    pointer-events: auto; /* Re-enable interaction for stats boxes */
+}
+
+.bottom-stats-bar .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* gap: 2px; */
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.85); /* More opaque for floating on map */
+    border: 1px solid rgba(210, 129, 23, 0.5);
+    border-radius: 8px;
+    min-width: 100px;
+    height: 48px; /* Fixed height to match km/mi buttons */
+    box-sizing: border-box;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); /* Add shadow for floating effect */
+}
+
+.bottom-stats-bar .stat-value {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #FF6B35;
+    text-shadow: 0 0 5px rgba(255, 107, 53, 0.6);
+    font-family: 'IM Fell English', serif;
+    line-height: 1;
+}
+
+.bottom-stats-bar .stat-label {
+    font-size: 0.65rem;
+    color: rgba(220, 200, 180, 0.6);
+    font-family: 'IM Fell English', serif;
+    line-height: 1;
+}
+
+.bottom-stats-bar .unit-toggle {
+    display: flex;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.bottom-stats-bar .unit-toggle label {
+    flex: 1;
+    min-width: 80px;
+    height: 48px; /* Fixed height to match stat boxes */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #b8b3a3;
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(0, 0, 0, 0.85); /* More opaque for floating on map */
+    border: 1px solid rgba(210, 129, 23, 0.5);
+    font-family: 'IM Fell English', serif;
+    box-sizing: border-box;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); /* Add shadow for floating effect */
+}
+
+.bottom-stats-bar .unit-toggle label:hover {
+    background: rgba(210, 129, 23, 0.1);
+    color: #e8e3d3;
+}
+
+.bottom-stats-bar .unit-toggle input[type="radio"] {
+    margin-right: 6px;
+    cursor: pointer;
+    accent-color: #D28117;
+    flex-shrink: 0;
+}
+
+.bottom-stats-bar .unit-toggle input[type="radio"]:checked + span {
+    color: #D28117;
+    font-weight: bold;
+}
+
+.bottom-stats-bar .unit-toggle label:has(input:checked) {
+    background: rgba(210, 129, 23, 0.2);
+    border: 1px solid rgba(210, 129, 23, 0.4);
+}
+
+/* Adjust planner container - removed duplicate, using above definition */
+
+/* Ensure map doesn't overlap bottom stats */
+/* Map container height managed by planner-container */
+
+/* Waypoint Markers with Numbers */
+.waypoint-marker {
+    background: #FF6B35 !important;
+    border: 3px solid #FFE5B4 !important;
+    border-radius: 50% !important;
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #fff !important;
+    font-weight: bold !important;
+    font-size: 0.95rem !important;
+    line-height: 1 !important;
+    box-shadow: 0 0 15px rgba(255, 107, 53, 0.9), 0 0 30px rgba(255, 69, 0, 0.5) !important;
+    animation: pulse-waypoint 1.5s infinite alternate !important;
+    font-family: 'IM Fell English', serif !important;
+}
+
+@keyframes pulse-waypoint {
+    0% { 
+        transform: scale(1); 
+        box-shadow: 0 0 15px rgba(255, 107, 53, 0.9), 0 0 30px rgba(255, 69, 0, 0.5);
+    }
+    100% { 
+        transform: scale(1.08); 
+        box-shadow: 0 0 20px rgba(255, 107, 53, 1), 0 0 40px rgba(255, 69, 0, 0.7);
+    }
+}
+
+/* Mobile Adjustments for Bottom Stats Bar */
+@media (max-width: 768px) {
+    .stats-container {
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .bottom-stats-bar {
+        height: 75px;
+    }
+    
+    .bottom-stats-bar .stat-value {
+        font-size: 1.1rem;
+    }
+    
+    .bottom-stats-bar .stat-label {
+        font-size: 0.7rem;
+    }
+    
+    .bottom-stats-bar .unit-toggle {
+        margin-left: 0;
+    }
+    
+    .bottom-stats-bar .unit-toggle label {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+    }
+    
+    .planner-container {
+        height: calc(100vh - 80px - 75px);
+    }
+    
+    .cta-banner + .planner-container {
+        height: calc(100vh - 80px - 42px - 75px);
+        margin-top: 42px;
+    }
 }
 

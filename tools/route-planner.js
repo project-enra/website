@@ -12,7 +12,7 @@
     let waypointMarkers = [];
     let baseLayer = null; // Track current base layer
     let historicalOverlay = null;
-    let currentUnits = 'km';
+    let currentUnits = 'mi';
     let isLoadingRoute = false;
     let routeMode = 'auto'; // 'auto' or 'direct'
     let routingEngine = 'brouter'; // Only using Brouter now
@@ -174,17 +174,17 @@
 
     // Initialize control buttons
     function initControls() {
-        // Share route button
-        document.getElementById('shareRouteBtn').addEventListener('click', shareRoute);
+        // Floating control buttons
+        const clearBtn = document.getElementById('clearRouteBtnFloat');
+        const undoBtn = document.getElementById('undoBtnFloat');
+        const shareBtn = document.getElementById('shareRouteBtnFloat');
         
-        // Clear route button
-        document.getElementById('clearRouteBtn').addEventListener('click', clearRoute);
+        if (clearBtn) clearBtn.addEventListener('click', clearRoute);
+        if (undoBtn) undoBtn.addEventListener('click', undoLastWaypoint);
+        if (shareBtn) shareBtn.addEventListener('click', shareRoute);
 
-        // Undo button
-        document.getElementById('undoBtn').addEventListener('click', undoLastWaypoint);
-
-        // Route mode toggle
-        document.querySelectorAll('input[name="routeMode"]').forEach(radio => {
+        // Route mode toggle (floating controls only)
+        document.querySelectorAll('input[name="routeModeFloat"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 routeMode = e.target.value;
                 console.log('Route mode changed to:', routeMode);
@@ -192,6 +192,7 @@
                 if (waypoints.length >= 2) {
                     updateRoute();
                 }
+                updateURLHash();
             });
         });
 
@@ -203,25 +204,63 @@
             });
         });
 
+        // Route color picker (floating controls only)
+        const routeColorInputFloat = document.getElementById('routeColorFloat');
+        if (routeColorInputFloat) {
+            routeColorInputFloat.addEventListener('change', (e) => {
+                CONFIG.routeStyle.color = e.target.value;
+                CONFIG.routeOutlineStyle.color = e.target.value;
+                if (waypoints.length >= 2) {
+                    updateRoute();
+                }
+                updateURLHash();
+            });
+        }
+
+        // Route width slider (floating controls only)
+        const routeWidthInputFloat = document.getElementById('routeWidthFloat');
+        if (routeWidthInputFloat) {
+            routeWidthInputFloat.addEventListener('input', (e) => {
+                CONFIG.routeStyle.weight = parseInt(e.target.value);
+                CONFIG.routeOutlineStyle.weight = parseInt(e.target.value) + 4;
+                if (waypoints.length >= 2) {
+                    updateRoute();
+                }
+                updateURLHash();
+            });
+        }
+
         // Historical overlay toggle
-        document.getElementById('overlayToggle').addEventListener('change', (e) => {
-            toggleHistoricalOverlay(e.target.checked);
-        });
+        const overlayToggle = document.getElementById('overlayToggle');
+        if (overlayToggle) {
+            overlayToggle.addEventListener('change', (e) => {
+                toggleHistoricalOverlay(e.target.checked);
+            });
+        }
 
         // Opacity slider
-        document.getElementById('opacitySlider').addEventListener('input', (e) => {
-            updateOverlayOpacity(e.target.value);
-        });
+        const opacitySlider = document.getElementById('opacitySlider');
+        if (opacitySlider) {
+            opacitySlider.addEventListener('input', (e) => {
+                updateOverlayOpacity(e.target.value);
+            });
+        }
 
         // Historical map selector
-        document.getElementById('historicalMapSelect').addEventListener('change', (e) => {
-            changeHistoricalMap(e.target.value);
-        });
+        const historicalMapSelect = document.getElementById('historicalMapSelect');
+        if (historicalMapSelect) {
+            historicalMapSelect.addEventListener('change', (e) => {
+                changeHistoricalMap(e.target.value);
+            });
+        }
 
         // Base map selector
-        document.getElementById('baseMapSelect').addEventListener('change', (e) => {
-            changeBaseMap(e.target.value);
-        });
+        const baseMapSelect = document.getElementById('baseMapSelect');
+        if (baseMapSelect) {
+            baseMapSelect.addEventListener('change', (e) => {
+                changeBaseMap(e.target.value);
+            });
+        }
 
         // Panel toggle for mobile
         const panelToggleBtn = document.getElementById('panelToggleBtn');
@@ -232,17 +271,75 @@
 
     // Initialize mobile-specific features
     function initMobileFeatures() {
-        // Check if mobile
-        if (window.innerWidth <= 768) {
-            // Side panel starts visible on mobile
-            const sidePanel = document.getElementById('sidePanel');
-            sidePanel.classList.remove('collapsed');
+        const isMobile = window.innerWidth <= 768;
+        
+        // Initialize floating panel toggles
+        const mapControlsToggle = document.getElementById('mapControlsToggle');
+        const routeControlsToggle = document.getElementById('routeControlsToggle');
+        const mapControls = document.getElementById('floatingMapControls');
+        const routeControls = document.getElementById('floatingRouteControls');
+        
+        // Set initial state on mobile (collapsed by default)
+        if (isMobile) {
+            if (mapControls) mapControls.classList.remove('expanded');
+            if (routeControls) routeControls.classList.remove('expanded');
+        } else {
+            // Expanded by default on desktop
+            if (mapControls) mapControls.classList.add('expanded');
+            if (routeControls) routeControls.classList.add('expanded');
+        }
+        
+        // Map controls toggle
+        if (mapControlsToggle && mapControls) {
+            mapControlsToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mapControls.classList.toggle('expanded');
+                console.log('Map controls toggled:', mapControls.classList.contains('expanded'));
+            });
+        }
+        
+        // Route controls toggle
+        if (routeControlsToggle && routeControls) {
+            routeControlsToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                routeControls.classList.toggle('expanded');
+                console.log('Route controls toggled:', routeControls.classList.contains('expanded'));
+            });
+        }
+        
+        // Close panels when clicking outside on mobile
+        if (isMobile) {
+            document.addEventListener('click', (e) => {
+                const clickedMapControls = mapControls && mapControls.contains(e.target);
+                const clickedRouteControls = routeControls && routeControls.contains(e.target);
+                
+                if (!clickedMapControls && mapControls && mapControls.classList.contains('expanded')) {
+                    mapControls.classList.remove('expanded');
+                }
+                if (!clickedRouteControls && routeControls && routeControls.classList.contains('expanded')) {
+                    routeControls.classList.remove('expanded');
+                }
+            });
         }
         
         // Handle window resize
         window.addEventListener('resize', () => {
             if (map) {
                 map.invalidateSize();
+            }
+            
+            // Update panel states on resize
+            const newIsMobile = window.innerWidth <= 768;
+            if (newIsMobile !== isMobile) {
+                if (newIsMobile) {
+                    // Switched to mobile - collapse panels
+                    if (mapControls) mapControls.classList.remove('expanded');
+                    if (routeControls) routeControls.classList.remove('expanded');
+                } else {
+                    // Switched to desktop - expand panels
+                    if (mapControls) mapControls.classList.add('expanded');
+                    if (routeControls) routeControls.classList.add('expanded');
+                }
             }
         });
     }
@@ -260,13 +357,22 @@
         waypoints.push({ lat, lng });
         console.log(`Added waypoint ${waypoints.length}:`, { lat, lng });
 
-        // Add marker
-        const marker = L.circleMarker([lat, lng], CONFIG.waypointIcon)
-            .addTo(map)
-            .bindPopup(`Waypoint ${waypoints.length}`);
+        // Create simple circle marker
+        const waypointNumber = waypoints.length;
+        
+        const marker = L.circleMarker([lat, lng], {
+            radius: 8,
+            fillColor: '#FF6B35',
+            color: '#FFE5B4',
+            weight: 3,
+            opacity: 1,
+            fillOpacity: 1,
+            draggable: true,
+            className: 'waypoint-marker-circle'
+        }).addTo(map);
+        
+        marker.bindPopup(`Waypoint ${waypointNumber}`);
 
-        // Make marker draggable using Leaflet's built-in dragging
-        marker.dragging = true;
         marker.on('dragend', function(e) {
             handleWaypointDrag(e, marker);
         });
@@ -649,6 +755,11 @@
         const ctaClose = document.getElementById('ctaClose');
         const ctaBanner = document.getElementById('ctaBanner');
         
+        if (!ctaBanner) {
+            console.warn('CTA Banner element not found');
+            return;
+        }
+        
         // Check if user has closed banner before
         const bannerClosed = localStorage.getItem('veilglassCTAClosed');
         if (bannerClosed === 'true') {
@@ -657,10 +768,16 @@
         
         // Close button handler
         if (ctaClose) {
-            ctaClose.addEventListener('click', () => {
+            ctaClose.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('CTA banner close button clicked');
                 ctaBanner.classList.add('hidden');
                 localStorage.setItem('veilglassCTAClosed', 'true');
             });
+            console.log('CTA close button event listener attached');
+        } else {
+            console.warn('CTA close button not found');
         }
     }
 
@@ -721,7 +838,7 @@
                 // Restore settings
                 if (decoded.m) {
                     routeMode = decoded.m;
-                    document.querySelector(`input[name="routeMode"][value="${decoded.m}"]`).checked = true;
+                    document.querySelector(`input[name="routeModeFloat"][value="${decoded.m}"]`).checked = true;
                 }
                 if (decoded.u) {
                     currentUnits = decoded.u;
@@ -962,10 +1079,12 @@
         }
     }
 
-    // Toggle side panel (mobile)
+    // Toggle side panel (mobile) - Legacy function, side panel removed
     function toggleSidePanel() {
         const sidePanel = document.getElementById('sidePanel');
-        sidePanel.classList.toggle('collapsed');
+        if (sidePanel) {
+            sidePanel.classList.toggle('collapsed');
+        }
     }
 
     // Show/hide loading indicator
