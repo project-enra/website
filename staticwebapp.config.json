@@ -1,0 +1,36 @@
+{
+  "routes": [
+    {
+      "route": "/index.html",
+      "redirect": "/",
+      "statusCode": 301
+    },
+    {
+      "route": "/codex/index.html",
+      "redirect": "/codex/",
+      "statusCode": 301
+    },
+    {
+      "route": "/codex/realms/hook/index.html",
+      "redirect": "/codex/realms/hook/",
+      "statusCode": 301
+    },
+    {
+      "route": "/*.html",
+      "redirect": "/*",
+      "statusCode": 301
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/Images/*", "/fonts/*", "*.css", "*.js", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.ico", "*.xml", "*.txt"]
+  },
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "X-XSS-Protection": "1; mode=block"
+  },
+  "mimeTypes": {
+    ".json": "application/json"
+  }
+}
