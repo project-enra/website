@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veilglass - Heritage Discovery App | Project Enra</title>
+    <meta name="description" content="Veilglass is a mobile app that reveals hidden cultural heritage through location-based discovery. Available now on Android, coming soon to iOS.">
+    <meta name="keywords" content="heritage app, cultural heritage, location discovery, mobile app, Veilglass, Project Enra">
+    <meta name="author" content="Project Enra">
+    
+    <link rel="canonical" href="https://www.project-enra.com/veilglass">
+    
+    <!-- Open Graph tags for social media -->
+    <meta property="og:title" content="Veilglass - Heritage Discovery App | Project Enra">
+    <meta property="og:description" content="Veilglass is a mobile app that reveals hidden cultural heritage through location-based discovery. Available now on Android.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.project-enra.com/veilglass">
+    <meta property="og:image" content="https://www.project-enra.com/Images/Veillogo.png">
+    
+    <!-- Twitter Card tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Veilglass - Heritage Discovery App | Project Enra">
+    <meta name="twitter:description" content="Veilglass is a mobile app that reveals hidden cultural heritage through location-based discovery. Available now on Android.">
+    <meta name="twitter:image" content="https://www.project-enra.com/Images/Veillogo.png">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0PYG53CV8F"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0PYG53CV8F');
+    </script>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="/" style="display: flex; align-items: center; gap: 15px; text-decoration: none;">
+                        <img src="Images/penralogo.png" alt="Project Enra" class="logo-img">
+                        <h1>Project Enra</h1>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/veilglass" class="active">Veilglass</a></li>
+                    <li><a href="/codex/">Codex</a></li>
+                    <li><a href="/tools">Tools</a></li>
+                    <li><a href="/#contact">Contact</a></li>
+                </ul>
+                <div class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-fog-overlay"></div>
+            <canvas id="mystical-canvas"></canvas>
+            <div class="hero-container">
+                <div class="app-logo-large" style="margin-bottom: 2rem;">
+                    <img src="Images/Veillogo.png" alt="Veilglass" class="main-logo" style="max-width: 150px;">
+                </div>
+                <h1 class="hero-title" id="animated-title">Veilglass</h1>
+                <p class="hero-subtitle" id="animated-subtitle">Turn your walks into quests. The fog covers your realm — clear it by stepping outside and exploring. Every step reveals more of the map. Every discovery brings you closer to completing your local area.</p>
+                <div class="app-download-buttons" style="margin-top: 2rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                    <a href="https://play.google.com/store/apps/details?id=com.ProjectEnra.Veilglass" target="_blank" rel="noopener" class="store-button android-button" style="display: inline-flex; align-items: center; gap: 12px; padding: 14px 28px; background: linear-gradient(135deg, #34a853, #0f9d58); color: white; text-decoration: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(52, 168, 83, 0.4);">
+                        <span style="font-size: 1.5rem;">▶</span>
+                        <span>Download on Google Play</span>
+                    </a>
+                    <div class="ios-coming-soon" style="color: #e8e3d3; opacity: 0.8; font-size: 1rem;">
+                        <span>iOS coming soon</span>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <div class="scroll-arrow"></div>
+            </div>
+        </section>
+
+        <section id="heritage" class="heritage">
+            <div class="container">
+                <div class="app-showcase">
+                    <div class="app-info">
+                        <h2>How Veilglass Works</h2>
+                        <p class="app-description">Veilglass transforms the way you experience your surroundings. Through location-based discovery, the app reveals hidden cultural treasures — from forgotten castles and sacred groves to traditional pubs steeped in centuries of stories.</p>
+                        <p class="app-description">Using authentic geographic data and parish boundaries, Veilglass guides you on a journey through your local heritage, lifting the veil between the everyday and the extraordinary.</p>
+                    </div>
+                    <div class="app-screenshots">
+                        <div class="screenshot-container">
+                            <img src="Images/screens2.png" alt="Veilglass App Screenshot - Map View" class="screenshot">
+                        </div>
+                        <div class="screenshot-container featured">
+                            <img src="Images/screens3.png" alt="Veilglass App Screenshot - Discovery View" class="screenshot">
+                        </div>
+                        <div class="screenshot-container">
+                            <img src="Images/screens5.png" alt="Veilglass App Screenshot - Details View" class="screenshot">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="discovery" class="discovery">
+            <div class="container">
+                <h2>Key Features</h2>
+                <div class="discovery-grid">
+                    <div class="discovery-card" data-tilt>
+                        <div class="card-glow"></div>
+                        <h3>Fog of War Map</h3>
+                        <p>The map starts hidden. As you physically explore, the fog lifts to reveal heritage sites around you — encouraging real-world discovery.</p>
+                        <div class="card-particles"></div>
+                    </div>
+                    <div class="discovery-card" data-tilt>
+                        <div class="card-glow"></div>
+                        <h3>Parish Boundaries</h3>
+                        <p>Navigate through authentic administrative boundaries that connect you with centuries of local community heritage and identity.</p>
+                        <div class="card-particles"></div>
+                    </div>
+                    <div class="discovery-card" data-tilt>
+                        <div class="card-glow"></div>
+                        <h3>Heritage Points</h3>
+                        <p>Discover castles, churches, historic pubs, monuments, and natural landmarks that tell the story of your local area.</p>
+                        <div class="card-particles"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="notify" class="contact">
+            <div class="container">
+                <h2>Stay Updated</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>iOS Coming Soon</h3>
+                        <p>Veilglass is live on Android. If you're on iOS, sign up to be notified when we launch on the App Store.</p>
+                        <div class="contact-details">
+                            <p><strong>Android:</strong> <a href="https://play.google.com/store/apps/details?id=com.ProjectEnra.Veilglass" target="_blank" rel="noopener" style="color: #E6941F;">Available Now</a></p>
+                            <p><strong>iOS:</strong> Coming Soon</p>
+                            <p><strong>Questions?</strong> contact@project-enra.com</p>
+                        </div>
+                    </div>
+                    <div class="email-signup-container">
+                        <div class="signup-intro">
+                            <h4>Get iOS Launch Updates</h4>
+                            <p>Be the first to know when Veilglass arrives on the App Store.</p>
+                        </div>
+                        <form class="mystical-email-form" id="emailForm" action="https://project-enra.us19.list-manage.com/subscribe/post?u=9256593af0cce94ea4152100a&id=c96227964e&f_id=00cdc2e1f0" method="POST">
+                            <!-- Mailchimp bot protection -->
+                            <input type="text" name="b_9256593af0cce94ea4152100a_c96227964e" style="position: absolute; left: -5000px;" tabindex="-1" value="">
+                            <!-- Our bot protection: hidden field -->
+                            <input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off">
+                            
+                            <div class="form-group">
+                                <label for="email">Your Email Address</label>
+                                <input type="email" id="email" name="EMAIL" required placeholder="Enter your email address..." autocomplete="email">
+                                <div class="input-glow"></div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mystical-submit">
+                                <span class="btn-text">Notify Me</span>
+                                <div class="btn-particles"></div>
+                            </button>
+                        </form>
+                        <div class="success-message" id="successMessage" style="display: none;">
+                            <div class="success-glow"></div>
+                            <h4>You're on the List</h4>
+                            <p>We'll email you when Veilglass launches on iOS.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Project Enra</h3>
+                    <p>Creating tools and content for heritage discovery.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Explore</h3>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/veilglass">Veilglass</a></li>
+                        <li><a href="/codex/">Codex</a></li>
+                        <li><a href="/tools">Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="/privacy-policy">Privacy Policy</a></li>
+                        <li><a href="/terms-of-service">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2026 Project Enra. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

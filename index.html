@@ -3,25 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veilglass - Unveil the Hidden Heritage</title>
-    <meta name="description" content="Veilglass - A mystical journey through cultural heritage, revealing hidden history and ancient wisdom through location-based discovery ">
-    <meta name="keywords" content="cultural heritage, location discovery, mystical exploration, ancient history, Veilglass">
-    <meta name="author" content="Veilglass">
+    <title>Project Enra | Heritage Discovery Tools & Content</title>
+    <meta name="description" content="Project Enra creates map-based tools and games that make exploring your local area feel like an adventure. Discover hidden heritage with The Codex, plan routes on historical maps, and explore with the Veilglass app.">
+    <meta name="keywords" content="heritage discovery, local history, cultural heritage, route planner, heritage app, Project Enra">
+    <meta name="author" content="Project Enra">
     
     <link rel="canonical" href="https://www.project-enra.com/">
     
     <!-- Open Graph tags for social media -->
-    <meta property="og:title" content="Veilglass - Unveil the Hidden Heritage">
-    <meta property="og:description" content="A mystical journey through cultural heritage, revealing hidden history and ancient wisdom">
+    <meta property="og:title" content="Project Enra | Heritage Discovery Tools & Content">
+    <meta property="og:description" content="Map-based tools and games that make exploring feel like an adventure. Discover hidden heritage in your local area.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.project-enra.com/">
-    <meta property="og:image" content="https://www.project-enra.com/Images/Veillogo.png">
+    <meta property="og:image" content="https://www.project-enra.com/Images/penralogo.png">
     
     <!-- Twitter Card tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Veilglass - Unveil the Hidden Heritage">
-    <meta name="twitter:description" content="A mystical journey through cultural heritage, revealing hidden history and ancient wisdom">
-    <meta name="twitter:image" content="https://www.project-enra.com/Images/Veillogo.png">
+    <meta name="twitter:title" content="Project Enra | Heritage Discovery Tools & Content">
+    <meta name="twitter:description" content="Map-based tools and games that make exploring feel like an adventure. Discover hidden heritage in your local area.">
+    <meta name="twitter:image" content="https://www.project-enra.com/Images/penralogo.png">
+    
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Project Enra",
+        "url": "https://www.project-enra.com",
+        "logo": "https://www.project-enra.com/Images/penralogo.png",
+        "description": "Map-based tools and games that make exploring your local area feel like an adventure.",
+        "email": "contact@project-enra.com"
+    }
+    </script>
     
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,21 +49,334 @@
       gtag('js', new Date());
       gtag('config', 'G-0PYG53CV8F');
     </script>
+    
+    <style>
+        /* Project Enra Homepage Styles */
+        .enra-hero {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 100px;
+            padding-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+            background: #0a0a0a;
+        }
+        
+        /* Old map background layer */
+        .enra-hero::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            right: -10%;
+            bottom: -10%;
+            background-image: url('Images/homemap.webp');
+            background-size: cover;
+            background-position: center;
+            filter: sepia(0.4) brightness(0.35) contrast(1.1);
+            animation: slowDrift 60s ease-in-out infinite;
+            z-index: 0;
+        }
+        
+        /* Dark overlay with warm tint and vignette */
+        .enra-hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at center, transparent 0%, rgba(10, 10, 10, 0.7) 70%, rgba(10, 10, 10, 0.95) 100%),
+                radial-gradient(ellipse at 30% 40%, rgba(210, 129, 23, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 60%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
+                linear-gradient(180deg, rgba(10, 10, 10, 0.3) 0%, rgba(26, 21, 16, 0.5) 100%);
+            z-index: 1;
+        }
+        
+        @keyframes slowDrift {
+            0%, 100% {
+                transform: scale(1.05) translate(0, 0);
+            }
+            25% {
+                transform: scale(1.08) translate(-1%, 0.5%);
+            }
+            50% {
+                transform: scale(1.05) translate(0.5%, -0.5%);
+            }
+            75% {
+                transform: scale(1.08) translate(0.5%, 0.5%);
+            }
+        }
+        
+        .enra-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        /* Respect reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            .enra-hero::before {
+                animation: none;
+                transform: scale(1.05);
+            }
+            .enra-logo {
+                animation: none;
+            }
+        }
+        
+        .enra-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            border-radius: 20px;
+            filter: none; /* Override grayscale from styles.css */
+            box-shadow: 
+                0 0 40px rgba(210, 129, 23, 0.4),
+                0 0 80px rgba(210, 129, 23, 0.2);
+            animation: logoGlow 4s ease-in-out infinite;
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% {
+                box-shadow: 
+                    0 0 40px rgba(210, 129, 23, 0.4),
+                    0 0 80px rgba(210, 129, 23, 0.2);
+            }
+            50% {
+                box-shadow: 
+                    0 0 50px rgba(210, 129, 23, 0.5),
+                    0 0 100px rgba(210, 129, 23, 0.3);
+            }
+        }
+        
+        .enra-title {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 3.5rem;
+            color: #E6941F;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 30px rgba(210, 129, 23, 0.5);
+        }
+        
+        .enra-tagline {
+            font-size: 1.3rem;
+            color: #e8e3d3;
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+        }
+        
+        .hero-cta {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #E6941F, #D28117);
+            color: #0a0a0a;
+            font-family: 'IM Fell English', serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(210, 129, 23, 0.4);
+        }
+        
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(210, 129, 23, 0.6);
+        }
+        
+        /* Pathways Section */
+        .pathways-section {
+            padding: 5rem 0;
+            background: #0a0a0a;
+        }
+        
+        .pathways-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+            padding: 0 20px;
+        }
+        
+        .pathways-intro h2 {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 2.5rem;
+            color: #E6941F;
+            margin-bottom: 1rem;
+        }
+        
+        .pathways-intro p {
+            color: #e8e3d3;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .pathways-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .pathway-card {
+            background: linear-gradient(135deg, rgba(45, 24, 16, 0.5), rgba(210, 129, 23, 0.08));
+            border: 1px solid rgba(210, 129, 23, 0.25);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: block;
+            color: inherit;
+        }
+        
+        .pathway-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #E6941F, transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .pathway-card:hover::before {
+            opacity: 1;
+        }
+        
+        .pathway-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(230, 148, 31, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(210, 129, 23, 0.15);
+        }
+        
+        .pathway-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        
+        .pathway-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+        
+        .badge-live {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+        
+        .badge-coming {
+            background: rgba(210, 129, 23, 0.2);
+            color: #E6941F;
+            border: 1px solid rgba(210, 129, 23, 0.3);
+        }
+        
+        .pathway-name {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 1.8rem;
+            color: #E6941F;
+            margin-bottom: 1rem;
+        }
+        
+        .pathway-description {
+            color: #e8e3d3;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        
+        .pathway-link {
+            display: inline-block;
+            color: #E6941F;
+            font-size: 1rem;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        
+        .pathway-card:hover .pathway-link {
+            border-bottom-color: #E6941F;
+        }
+        
+        /* About Section */
+        .about-section {
+            padding: 5rem 0;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1510 100%);
+        }
+        
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+        
+        .about-content h2 {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 2.5rem;
+            color: #E6941F;
+            margin-bottom: 2rem;
+        }
+        
+        .about-content p {
+            color: #e8e3d3;
+            font-size: 1.15rem;
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .enra-title {
+                font-size: 2.5rem;
+            }
+            
+            .enra-tagline {
+                font-size: 1.1rem;
+            }
+            
+            .pathways-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pathway-card {
+                padding: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="header">
         <nav class="nav">
             <div class="nav-container">
                 <div class="nav-logo">
-                    <img src="Images/Veillogo.png" alt="Veilglass" class="logo-img">
-                    <h1>Veilglass</h1>
+                    <a href="/" style="display: flex; align-items: center; gap: 15px; text-decoration: none;">
+                        <img src="Images/penralogo.png" alt="Project Enra" class="logo-img">
+                        <h1>Project Enra</h1>
+                    </a>
                 </div>
                 <ul class="nav-menu">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#heritage">Heritage</a></li>
-                    <li><a href="#discovery">Discovery</a></li>
+                    <li><a href="/" class="active">Home</a></li>
+                    <li><a href="/veilglass">Veilglass</a></li>
+                    <li><a href="/codex/">Codex</a></li>
                     <li><a href="/tools">Tools</a></li>
-                    <!-- <li><a href="#preview">Preview</a></li> --> <!-- DISABLED: Uncomment when fog map is re-enabled -->
                     <li><a href="#contact">Contact</a></li>
                 </ul>
                 <div class="nav-toggle">
@@ -63,137 +389,74 @@
     </header>
 
     <main>
-        <section id="home" class="hero">
-            <div class="hero-fog-overlay"></div>
-            <canvas id="mystical-canvas"></canvas>
-            <div class="hero-container">
-                <h1 class="hero-title" id="animated-title">Unveil the Hidden Heritage</h1>
-                <p class="hero-subtitle" id="animated-subtitle">Journey through the mists of time to discover ancient wisdom, forgotten stories, and sacred places that lie hidden in your world.</p>
-                <div class="hero-buttons">
-                    <a href="#contact" class="btn btn-primary" id="quest-btn">Begin Your Quest</a>
-                    <a href="#heritage" class="btn btn-secondary" id="mystery-btn">Explore the Mysteries</a>
-                </div>
-            </div>
-            <div class="scroll-indicator">
-                <div class="scroll-arrow"></div>
+        <section class="enra-hero">
+            <div class="enra-hero-content">
+                <img src="Images/penralogo.png" alt="Project Enra Logo" class="enra-logo">
+                <h1 class="enra-title">Project Enra</h1>
+                <p class="enra-tagline">Map-based tools and games that make exploring feel like an adventure. Whether you're plotting walks through centuries-old landscapes, uncovering hidden local heritage, or playing games that bring maps to life — we're here to help you see the world differently.</p>
+                <a href="/codex/" class="hero-cta">Find Your Realm</a>
             </div>
         </section>
 
-        <section id="heritage" class="heritage">
-            <div class="container">
-                <div class="app-showcase">
-                    <div class="app-info">
-                        <div class="app-logo-large">
-                            <img src="Images/Veillogo.png" alt="Veilglass" class="main-logo">
-                        </div>
-                        <h2>The Ancient Wisdom Awaits</h2>
-                        <div class="mobile-app-badge">
-                            <span class="coming-soon">Coming Soon</span>
-                            <div class="platform-badges">
-                                <div class="platform-badge android">
-                                    <span>Android</span>
-                                </div>
-                                <div class="platform-badge ios">
-                                    <span>iOS</span>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="app-description">Veilglass is a mystical mobile application that transforms the way you experience your world. Through location-based discovery, we reveal hidden cultural treasures—from forgotten castles and sacred groves to traditional pubs steeped in centuries of stories.</p>
-                        <p class="app-description">Our app lifts the veil between the mundane and the magical, using authentic geographic data and parish boundaries to guide you on a journey through your local heritage.</p>
-                    </div>
-                    <div class="app-screenshots">
-                        <div class="screenshot-container">
-                            <img src="Images/screens2.png" alt="Veilglass App Screenshot 1" class="screenshot">
-                        </div>
-                        <div class="screenshot-container featured">
-                            <img src="Images/screens3.png" alt="Veilglass App Screenshot 2" class="screenshot">
-                        </div>
-                        <div class="screenshot-container">
-                            <img src="Images/screens5.png" alt="Veilglass App Screenshot 3" class="screenshot">
-                        </div>
-                    </div>
-                </div>
+        <section class="pathways-section">
+            <div class="pathways-intro">
+                <h2>Start Exploring</h2>
+                <p>Discover what's hidden in your local area, plan heritage walks, and explore with our tools and apps.</p>
+            </div>
+
+            <div class="pathways-grid">
+                <!-- The Codex - Primary pathway -->
+                <a href="/codex/" class="pathway-card">
+                    <span class="pathway-icon">📖</span>
+                    <span class="pathway-badge badge-live">Live</span>
+                    <h3 class="pathway-name">The Codex</h3>
+                    <p class="pathway-description">Find your realm. Browse our encyclopedia of local heritage — documented places, historic pubs, churches, and hidden landmarks organised by parish.</p>
+                    <span class="pathway-link">Find Your Realm →</span>
+                </a>
+
+                <!-- Tools -->
+                <a href="/tools" class="pathway-card">
+                    <span class="pathway-icon">🗺️</span>
+                    <span class="pathway-badge badge-live">Live</span>
+                    <h3 class="pathway-name">Route Planner</h3>
+                    <p class="pathway-description">Plan walking routes and overlay historical maps to see how the landscape looked centuries ago. Free to use, no signup required.</p>
+                    <span class="pathway-link">Plan a Route →</span>
+                </a>
+
+                <!-- Veilglass -->
+                <a href="/veilglass" class="pathway-card">
+                    <span class="pathway-icon">📱</span>
+                    <span class="pathway-badge badge-live">Available Now</span>
+                    <h3 class="pathway-name">Veilglass</h3>
+                    <p class="pathway-description">Turn your walks into quests. Our mobile app reveals hidden heritage as you explore — the fog clears with every step you take.</p>
+                    <span class="pathway-link">Get Veilglass →</span>
+                </a>
             </div>
         </section>
 
-        <section id="discovery" class="discovery">
-            <div class="container">
-                <h2>Paths of Discovery</h2>
-                <div class="discovery-grid">
-                    <div class="discovery-card" data-tilt>
-                        <div class="card-glow"></div>
-                        <h3>Fog of War Revelation</h3>
-                        <p>Watch as the mystical fog lifts from your map, revealing hidden cultural treasures as you physically explore your sacred landscape.</p>
-                        <div class="card-particles"></div>
-                    </div>
-                    <div class="discovery-card" data-tilt>
-                        <div class="card-glow"></div>
-                        <h3>Parish Boundaries</h3>
-                        <p>Navigate through authentic administrative boundaries that connect you with centuries of local community heritage and identity.</p>
-                        <div class="card-particles"></div>
-                    </div>
-                    <div class="discovery-card" data-tilt>
-                        <div class="card-glow"></div>
-                        <h3>Cultural Points of Power</h3>
-                        <p>Uncover ancient castles, sacred groves, traditional pubs, and mystical monuments that hold the essence of your ancestral lands.</p>
-                        <div class="card-particles"></div>
-                    </div>
-                </div>
+        <section class="about-section">
+            <div class="about-content">
+                <h2>About Project Enra</h2>
+                <p>We believe every place has stories worth discovering. Project Enra builds tools and games that help you explore your surroundings through a historical lens — with just enough mystery to make it feel like an adventure.</p>
+                <p>From free web tools to mobile apps to upcoming games, everything we make is designed to get you outside, curious, and looking at familiar places with fresh eyes.</p>
             </div>
         </section>
-
-        <!-- FOG MAP PREVIEW SECTION - DISABLED -->
-        <!-- Uncomment below to re-enable the fog map preview -->
-        <!--
-        <section id="preview" class="preview-section">
-            <div class="container">
-                <h2>Experience the Mystical Fog</h2>
-                <div class="preview-content">
-                    <div class="preview-info">
-                        <h3>Lift the Veil</h3>
-                        <p>Experience the core magic of Veilglass right here. Drag your cursor across the mystical map to clear the ancient fog and reveal hidden heritage sites in your realm.</p>
-                        <div class="preview-stats">
-                            <div class="stat-item">
-                                <span class="stat-number" id="exploredPercent">0%</span>
-                                <span class="stat-label">Explored</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-number" id="sitesFound">0</span>
-                                <span class="stat-label">Sites Found</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-secondary" id="resetFog">Reset the Veil</button>
-                    </div>
-                    <div class="fog-map-container">
-                        <canvas id="fogMap" width="400" height="300"></canvas>
-                        <div class="map-overlay">
-                            <div class="compass">
-                                <div class="compass-needle"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        -->
 
         <section id="contact" class="contact">
             <div class="container">
-                <h2>Join the Quest</h2>
+                <h2>Get in Touch</h2>
                 <div class="contact-content">
                     <div class="contact-info">
-                        <h3>Become a Keeper of Secrets</h3>
-                        <p>Enter your mystical correspondence below to be among the first to know when Veilglass unveils its ancient powers. Join our sacred circle and be notified when the app launches.</p>
+                        <h3>Questions or Feedback?</h3>
+                        <p>We'd love to hear from you. Whether you've found a bug, have a suggestion, or just want to say hello.</p>
                         <div class="contact-details">
-                            <p><strong>The Journey Begins:</strong> Soon</p>
-                            <p><strong>Your Quest Awaits:</strong> Be the first to explore</p>
-                            <p><strong>Questions?</strong> contact@project-enra.com</p>
+                            <p><strong>Email:</strong> contact@project-enra.com</p>
                         </div>
                     </div>
                     <div class="email-signup-container">
                         <div class="signup-intro">
-                            <h4>Enter Your Email to Begin</h4>
-                            <p>Join the mystical mailing list and unlock early access to hidden heritage discoveries.</p>
+                            <h4>Stay in the Loop</h4>
+                            <p>Get occasional updates about new realms, tools, and features.</p>
                         </div>
                         <form class="mystical-email-form" id="emailForm" action="https://project-enra.us19.list-manage.com/subscribe/post?u=9256593af0cce94ea4152100a&id=c96227964e&f_id=00cdc2e1f0" method="POST">
                             <!-- Mailchimp bot protection -->
@@ -202,19 +465,19 @@
                             <input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off">
                             
                             <div class="form-group">
-                                <label for="email">Your Mystical Correspondence</label>
+                                <label for="email">Your Email Address</label>
                                 <input type="email" id="email" name="EMAIL" required placeholder="Enter your email address..." autocomplete="email">
                                 <div class="input-glow"></div>
                             </div>
                             <button type="submit" class="btn btn-primary mystical-submit">
-                                <span class="btn-text">Join the Sacred Circle</span>
+                                <span class="btn-text">Subscribe</span>
                                 <div class="btn-particles"></div>
                             </button>
                         </form>
                         <div class="success-message" id="successMessage" style="display: none;">
                             <div class="success-glow"></div>
-                            <h4>Welcome to the Circle</h4>
-                            <p>Your mystical correspondence has been received. The ancient paths await your footsteps.</p>
+                            <h4>You're Subscribed</h4>
+                            <p>Thanks for joining. We'll keep you posted on new developments.</p>
                         </div>
                     </div>
                 </div>
@@ -226,16 +489,16 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>Veilglass</h3>
-                    <p>Unveiling the sacred mysteries hidden within your realm.</p>
+                    <h3>Project Enra</h3>
+                    <p>Creating tools and content for heritage discovery.</p>
                 </div>
                 <div class="footer-section">
-                    <h3>Sacred Paths</h3>
+                    <h3>Explore</h3>
                     <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#heritage">Heritage</a></li>
-                        <li><a href="#discovery">Discovery</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/veilglass">Veilglass</a></li>
+                        <li><a href="/codex/">Codex</a></li>
+                        <li><a href="/tools">Tools</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -248,11 +511,7 @@
             </div>
             <div class="footer-bottom">
                 <div class="footer-bottom-content">
-                    <p>&copy; 2024 Veilglass. All rights reserved.</p>
-                    <div class="project-enra-credit">
-                        <img src="Images/Moss-Covered Stone with Glowing Cracks.png" alt="Project Enra" class="enra-logo">
-                        <span>Project Enra</span>
-                    </div>
+                    <p>&copy; 2026 Project Enra. All rights reserved.</p>
                 </div>
             </div>
         </div>

@@ -6,6 +6,11 @@
       "statusCode": 301
     },
     {
+      "route": "/veilglass.html",
+      "redirect": "/veilglass",
+      "statusCode": 301
+    },
+    {
       "route": "/codex/index.html",
       "redirect": "/codex/",
       "statusCode": 301
