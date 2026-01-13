@@ -29,4 +29,4 @@ Thumbs.db
 *.swo
 
 # Codex (work in progress - not ready for production)
-codex/
+codex/realms/hook/

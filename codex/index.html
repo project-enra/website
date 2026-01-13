@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Codex - Project Enra | Local Heritage Explorer</title>
+    <meta name="description" content="Explore the Realms of Hampshire and beyond. Discover local heritage, history, and hidden places through the Project Enra Codex.">
+    <meta name="keywords" content="Hampshire heritage, local history, Hook, Fleet, Odiham, Hartley Wintney, village history, parish guide">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="The Codex - Project Enra">
+    <meta property="og:description" content="Explore the Realms of Hampshire and beyond. Discover local heritage, history, and hidden places.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.project-enra.com/codex/">
+    <meta property="og:image" content="https://www.project-enra.com/Images/penralogo.png">
+    <link rel="canonical" href="https://www.project-enra.com/codex/">
+    
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Codex Landing Page Styles */
+        .codex-hero {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 100px;
+            padding-bottom: 60px;
+            background: 
+                linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)),
+                radial-gradient(ellipse at 30% 40%, rgba(210, 129, 23, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 60%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
+                #0a0a0a;
+            position: relative;
+        }
+        
+        .codex-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="fog" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23D28117" opacity="0.08"/></pattern></defs><rect width="100" height="100" fill="url(%23fog)"/></svg>');
+            opacity: 0.5;
+            animation: driftFog 30s linear infinite;
+        }
+        
+        .codex-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .codex-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(210, 129, 23, 0.2), rgba(45, 24, 16, 0.4));
+            color: #E6941F;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 1px solid rgba(210, 129, 23, 0.3);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(230, 148, 31, 0.5);
+        }
+        
+        .codex-title {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 4rem;
+            color: #E6941F;
+            margin-bottom: 1.5rem;
+            text-shadow: 
+                0 0 20px rgba(210, 129, 23, 0.8),
+                0 0 40px rgba(210, 129, 23, 0.4);
+        }
+        
+        .codex-subtitle {
+            font-size: 1.3rem;
+            color: #e8e3d3;
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Realms Section */
+        .realms-section {
+            padding: 5rem 0;
+            background: 
+                linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.9)),
+                radial-gradient(ellipse at center, #2d1810 0%, #0a0a0a 70%);
+        }
+        
+        .realms-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+            padding: 0 20px;
+        }
+        
+        .realms-intro h2 {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 2.5rem;
+            color: #E6941F;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px rgba(230, 148, 31, 0.5);
+        }
+        
+        .realms-intro p {
+            color: #e8e3d3;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+        
+        .realms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .realm-card {
+            background: linear-gradient(135deg, rgba(45, 24, 16, 0.4), rgba(210, 129, 23, 0.08));
+            border: 1px solid rgba(210, 129, 23, 0.25);
+            border-radius: 16px;
+            padding: 2rem;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: block;
+            color: inherit;
+        }
+        
+        .realm-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #E6941F, transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .realm-card:hover::before {
+            opacity: 1;
+        }
+        
+        .realm-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(230, 148, 31, 0.5);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(210, 129, 23, 0.2);
+        }
+        
+        .realm-card.placeholder {
+            cursor: default;
+            opacity: 0.7;
+        }
+        
+        .realm-card.placeholder:hover {
+            transform: translateY(-4px);
+            opacity: 0.85;
+        }
+        
+        .realm-name {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 1.8rem;
+            color: #E6941F;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(230, 148, 31, 0.3);
+            transition: text-shadow 0.3s ease;
+        }
+        
+        .realm-card:hover .realm-name {
+            text-shadow: 0 0 15px rgba(230, 148, 31, 0.6);
+        }
+        
+        .realm-type {
+            font-size: 0.9rem;
+            color: rgba(232, 227, 211, 0.7);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        
+        .realm-description {
+            color: #e8e3d3;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        
+        .realm-stats {
+            display: flex;
+            gap: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(210, 129, 23, 0.15);
+        }
+        
+        .realm-stat {
+            text-align: center;
+        }
+        
+        .realm-stat-value {
+            display: block;
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 1.4rem;
+            color: #E6941F;
+        }
+        
+        .realm-stat-label {
+            font-size: 0.8rem;
+            color: rgba(232, 227, 211, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Back to Home */
+        .codex-nav {
+            text-align: center;
+            padding: 3rem 0;
+            background: #0a0a0a;
+            border-top: 1px solid rgba(210, 129, 23, 0.2);
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #e8e3d3;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 1rem 2rem;
+            border: 2px solid rgba(210, 129, 23, 0.3);
+            border-radius: 8px;
+            background: rgba(45, 24, 16, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #E6941F;
+            border-color: #E6941F;
+            background: rgba(210, 129, 23, 0.15);
+            box-shadow: 0 0 20px rgba(210, 129, 23, 0.2);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .codex-title {
+                font-size: 2.8rem;
+            }
+            
+            .codex-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .realms-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .realm-card {
+                padding: 1.5rem;
+            }
+            
+            .realm-name {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="/" style="display: flex; align-items: center; gap: 15px; text-decoration: none;">
+                        <img src="../Images/penralogo.png" alt="Project Enra" class="logo-img">
+                        <h1>Project Enra</h1>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/veilglass">Veilglass</a></li>
+                    <li><a href="/codex/" class="active">Codex</a></li>
+                    <li><a href="/tools">Tools</a></li>
+                    <li><a href="/#contact">Contact</a></li>
+                </ul>
+                <div class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="codex-hero">
+            <div class="codex-hero-content">
+                <div class="codex-badge">Project Enra</div>
+                <h1 class="codex-title">The Codex</h1>
+                <p class="codex-subtitle">A growing collection of Realms and the Enwella within them — local heritage documented and encyclopedic, waiting to be discovered.</p>
+            </div>
+        </section>
+
+        <section class="realms-section">
+            <div class="realms-intro">
+                <h2>Browse the Realms</h2>
+                <p>Each Realm represents a parish or area with its own history, character, and hidden places. Select a Realm to explore its Enwella — the pubs, landmarks, memorials, and forgotten corners that make each place unique.</p>
+            </div>
+
+            <div class="realms-grid">
+                <!-- Hook -->
+                <a href="/codex/realms/hook/" class="realm-card">
+                    <h3 class="realm-name">Hook</h3>
+                    <p class="realm-type">Parish • North Hampshire</p>
+                    <p class="realm-description">A village shaped by the London to Southampton coaching route, with roots stretching back to the Domesday Book.</p>
+                    <div class="realm-stats">
+                        <div class="realm-stat">
+                            <span class="realm-stat-value">—</span>
+                            <span class="realm-stat-label">Enwella</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Odiham -->
+                <div class="realm-card placeholder">
+                    <h3 class="realm-name">Odiham</h3>
+                    <p class="realm-type">Parish • North Hampshire</p>
+                    <p class="realm-description">An ancient market town with a ruined castle, Georgian high street, and centuries of stories waiting to be uncovered.</p>
+                    <div class="realm-stats">
+                        <div class="realm-stat">
+                            <span class="realm-stat-value">—</span>
+                            <span class="realm-stat-label">Enwella</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hartley Wintney -->
+                <div class="realm-card placeholder">
+                    <h3 class="realm-name">Hartley Wintney</h3>
+                    <p class="realm-type">Parish • North Hampshire</p>
+                    <p class="realm-description">A village green flanked by cricket pitches and oak trees, with a surprisingly rich tapestry of local heritage.</p>
+                    <div class="realm-stats">
+                        <div class="realm-stat">
+                            <span class="realm-stat-value">—</span>
+                            <span class="realm-stat-label">Enwella</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fleet -->
+                <div class="realm-card placeholder">
+                    <h3 class="realm-name">Fleet</h3>
+                    <p class="realm-type">Town • North Hampshire</p>
+                    <p class="realm-description">A railway town that grew from heathland, now home to Fleet Pond — Hampshire's largest freshwater lake.</p>
+                    <div class="realm-stats">
+                        <div class="realm-stat">
+                            <span class="realm-stat-value">—</span>
+                            <span class="realm-stat-label">Enwella</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Crookham -->
+                <div class="realm-card placeholder">
+                    <h3 class="realm-name">Crookham</h3>
+                    <p class="realm-type">Village • North Hampshire</p>
+                    <p class="realm-description">Split between Church Crookham and Crookham Village, with canal-side paths and quiet corners to discover.</p>
+                    <div class="realm-stats">
+                        <div class="realm-stat">
+                            <span class="realm-stat-value">—</span>
+                            <span class="realm-stat-label">Enwella</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Binsted, Bentley & Selborne -->
+                <div class="realm-card placeholder">
+                    <h3 class="realm-name">Binsted, Bentley & Selborne</h3>
+                    <p class="realm-type">Rural Parishes • East Hampshire</p>
+                    <p class="realm-description">A trio of villages in the East Hampshire hills, including Gilbert White's famous Selborne and the ancient woodlands beyond.</p>
+                    <div class="realm-stats">
+                        <div class="realm-stat">
+                            <span class="realm-stat-value">—</span>
+                            <span class="realm-stat-label">Enwella</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Route Planner CTA -->
+        <section style="padding: 3rem 20px; background: linear-gradient(135deg, rgba(45, 24, 16, 0.6), rgba(210, 129, 23, 0.1)); text-align: center;">
+            <div style="max-width: 600px; margin: 0 auto;">
+                <h3 style="font-family: 'Uncial Antiqua', serif; font-size: 1.8rem; color: #E6941F; margin-bottom: 1rem;">Plan a Heritage Walk</h3>
+                <p style="color: #e8e3d3; font-size: 1.1rem; margin-bottom: 1.5rem;">Found somewhere interesting? Plot a walking route and overlay historical maps to see how the landscape looked centuries ago.</p>
+                <a href="/tools/route-planner" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #E6941F, #D28117); color: #0a0a0a; font-weight: bold; text-decoration: none; border-radius: 8px; font-size: 1.1rem; transition: all 0.3s ease;">Plan a Route →</a>
+            </div>
+        </section>
+        
+        <div class="codex-nav">
+            <a href="/" class="back-link">
+                ← Return to Project Enra
+            </a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Project Enra</h3>
+                    <p>Creating tools and content for heritage discovery.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Explore</h3>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/veilglass">Veilglass</a></li>
+                        <li><a href="/codex/">Codex</a></li>
+                        <li><a href="/tools">Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="/privacy-policy">Privacy Policy</a></li>
+                        <li><a href="/terms-of-service">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2026 Project Enra. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    navToggle.classList.toggle('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
