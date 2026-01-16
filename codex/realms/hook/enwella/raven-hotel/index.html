@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Raven Hotel - Hook | Project Enra</title>
+    <meta name="description" content="The Raven Hotel in Hook, a 1901 manor house converted to a hotel.">
+    <link rel="canonical" href="https://www.project-enra.com/codex/realms/hook/enwella/raven-hotel/">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <link rel="stylesheet" href="../../../../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0PYG53CV8F"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0PYG53CV8F');
+    </script>
+    
+    <style>
+        .enwella-page { min-height: 100vh; padding-top: 100px; background: #0a0a0a; }
+        .enwella-container { max-width: 800px; margin: 0 auto; padding: 2rem 20px; }
+        .enwella-badge { display: inline-block; background: linear-gradient(135deg, rgba(210, 129, 23, 0.2), rgba(45, 24, 16, 0.4)); color: #E6941F; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; border: 1px solid rgba(210, 129, 23, 0.3); margin-bottom: 1rem; }
+        .enwella-title { font-family: 'Uncial Antiqua', serif; font-size: 3rem; color: #E6941F; margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(210, 129, 23, 0.5); }
+        .enwella-realm { color: rgba(232, 227, 211, 0.6); font-size: 1rem; margin-bottom: 2rem; }
+        .enwella-realm a { color: #E6941F; text-decoration: none; }
+        .coming-soon { background: rgba(45, 24, 16, 0.4); border: 1px solid rgba(210, 129, 23, 0.25); border-radius: 12px; padding: 3rem; text-align: center; }
+        .coming-soon h2 { font-family: 'Uncial Antiqua', serif; color: #E6941F; margin-bottom: 1rem; }
+        .coming-soon p { color: #e8e3d3; line-height: 1.8; }
+        .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: #e8e3d3; text-decoration: none; margin-top: 2rem; padding: 0.75rem 1.5rem; border: 1px solid rgba(210, 129, 23, 0.3); border-radius: 8px; transition: all 0.3s; }
+        .back-link:hover { color: #E6941F; border-color: #E6941F; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="/" style="display: flex; align-items: center; gap: 15px; text-decoration: none;">
+                        <img src="../../../../Images/penralogo.png" alt="Project Enra" class="logo-img">
+                        <h1>Project Enra</h1>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/veilglass">Veilglass</a></li>
+                    <li><a href="/codex/" class="active">Codex</a></li>
+                    <li><a href="/tools">Tools</a></li>
+                    <li><a href="/#contact">Contact</a></li>
+                </ul>
+                <div class="nav-toggle"><span></span><span></span><span></span></div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="enwella-page">
+        <div class="enwella-container">
+            <div class="enwella-badge">Hotel</div>
+            <h1 class="enwella-title">The Raven Hotel</h1>
+            <p class="enwella-realm">Enwella in <a href="/codex/realms/hook/">Hook</a></p>
+            
+            <div class="coming-soon">
+                <h2>Coming Soon</h2>
+                <p>This Enwella page is being researched. The Raven Hotel was built in 1901 as a manor house and later converted to a hotel. Not to be confused with Old Raven House (1653), the original Raven coaching inn.</p>
+            </div>
+            
+            <a href="/codex/realms/hook/" class="back-link">← Back to Hook</a>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    navToggle.classList.toggle('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
