@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hook - Realm of the Codex | Project Enra</title>
+    <meta name="description" content="Explore Hook, a Hampshire village shaped by the London to Southampton coaching route. Discover its history, heritage, and hidden Enwella through the Project Enra Codex.">
+    <meta name="keywords" content="Hook Hampshire, Hook village history, Hook heritage, North Hampshire villages, Hampshire history">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="Hook - Realm of the Codex | Project Enra">
+    <meta property="og:description" content="Explore Hook, a Hampshire village shaped by the London to Southampton coaching route. Discover its history and hidden heritage.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.project-enra.com/codex/realms/hook/">
+    <meta property="og:image" content="https://www.project-enra.com/Images/Veillogo.png">
+    <link rel="canonical" href="https://www.project-enra.com/codex/realms/hook/">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <!-- Mapbox -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+    
+    <link rel="stylesheet" href="../../../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0PYG53CV8F"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0PYG53CV8F');
+    </script>
+    
+    <style>
+        /* ============================================
+           REALM PAGE - IMMERSIVE MAP EXPERIENCE
+           ============================================ */
+        
+        body {
+            overflow-x: hidden;
+        }
+        
+        /* Fixed Map Background */
+        #realm-map {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+        }
+        
+        /* Fog Overlay - Clears on scroll */
+        .fog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            background: #0a0a0a;
+            opacity: 1;
+            transition: opacity 0.3s ease-out;
+        }
+        
+        /* Scrolling Content Layer */
+        .content-layer {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+        
+        /* Hero Section - Transparent to show map */
+        .realm-hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding-top: 80px;
+        }
+        
+        .realm-hero-content {
+            max-width: 600px;
+            padding: 3rem;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(210, 129, 23, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        .realm-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(210, 129, 23, 0.25), rgba(45, 24, 16, 0.5));
+            color: #E6941F;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 1px solid rgba(210, 129, 23, 0.4);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(230, 148, 31, 0.5);
+        }
+        
+        .realm-title {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 4rem;
+            color: #E6941F;
+            margin-bottom: 1rem;
+            text-shadow: 
+                0 0 30px rgba(210, 129, 23, 0.8),
+                0 0 60px rgba(210, 129, 23, 0.4);
+        }
+        
+        .realm-tagline {
+            font-size: 1.3rem;
+            color: #e8e3d3;
+            font-style: italic;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .scroll-prompt {
+            color: rgba(232, 227, 211, 0.6);
+            font-size: 0.9rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .scroll-prompt span {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        /* Content Cards */
+        .content-section {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .content-card {
+            background: rgba(10, 10, 10, 0.88);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(210, 129, 23, 0.25);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 
+                0 15px 50px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(210, 129, 23, 0.1);
+            position: relative;
+        }
+        
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(210, 129, 23, 0.5), transparent);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        .section-title {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 1.8rem;
+            color: #E6941F;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 15px rgba(230, 148, 31, 0.4);
+        }
+        
+        .content-card p {
+            color: #e8e3d3;
+            font-size: 1.1rem;
+            line-height: 1.9;
+            margin-bottom: 1.2rem;
+        }
+        
+        .content-card p:last-of-type {
+            margin-bottom: 0;
+        }
+        
+        /* Links in content */
+        .content-card a {
+            color: #E6941F;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(230, 148, 31, 0.4);
+            transition: border-color 0.2s ease;
+        }
+        
+        .content-card a:hover {
+            border-bottom-color: #E6941F;
+        }
+        
+        /* Quick Stats Card */
+        .stats-card {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        @media (min-width: 500px) {
+            .stats-card {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem 0.75rem;
+            background: rgba(210, 129, 23, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(210, 129, 23, 0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 90px;
+        }
+        
+        .stat-label {
+            display: block;
+            font-size: 0.7rem;
+            color: rgba(232, 227, 211, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 1rem;
+            color: #E6941F;
+            line-height: 1.3;
+        }
+        
+        /* Historic Map Figures */
+        .historic-map {
+            margin: 1.5rem 0;
+            padding: 0;
+        }
+        
+        .historic-map img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid rgba(210, 129, 23, 0.3);
+            display: block;
+            cursor: zoom-in;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .historic-map img:hover {
+            box-shadow: 0 8px 30px rgba(210, 129, 23, 0.25);
+        }
+        
+        .historic-map figcaption {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: rgba(232, 227, 211, 0.7);
+            font-style: italic;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        .historic-map figcaption .map-source {
+            display: block;
+            font-size: 0.75rem;
+            color: rgba(232, 227, 211, 0.5);
+            font-style: normal;
+            margin-top: 0.25rem;
+        }
+        
+        /* Sources */
+        .sources-section {
+            background: rgba(45, 24, 16, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .sources-title {
+            font-size: 0.9rem;
+            color: #E6941F;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .sources-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sources-list li {
+            font-size: 0.85rem;
+            color: rgba(232, 227, 211, 0.6);
+            margin-bottom: 0.4rem;
+        }
+        
+        .sources-list a {
+            color: rgba(232, 227, 211, 0.6);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .sources-list a:hover {
+            color: #E6941F;
+        }
+        
+        /* ============================================
+           EXPLORE THE REALM - Full Map Section
+           ============================================ */
+        
+        .explore-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 2rem;
+        }
+        
+        .explore-header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .explore-header-text {
+            text-align: left;
+        }
+        
+        .explore-title {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 1.6rem;
+            color: #E6941F;
+            margin-bottom: 0.25rem;
+            text-shadow: 0 0 20px rgba(230, 148, 31, 0.5);
+        }
+        
+        .explore-subtitle {
+            color: #e8e3d3;
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+        
+        .explore-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .map-interact-hint {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: rgba(210, 129, 23, 0.15);
+            border: 1px solid rgba(210, 129, 23, 0.25);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: rgba(230, 148, 31, 0.8);
+        }
+        
+        .back-to-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            background: rgba(45, 24, 16, 0.5);
+            border: 1px solid rgba(210, 129, 23, 0.3);
+            border-radius: 8px;
+            color: #e8e3d3;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .back-to-top:hover {
+            background: rgba(210, 129, 23, 0.2);
+            border-color: rgba(210, 129, 23, 0.5);
+            color: #E6941F;
+        }
+        
+        @media (max-width: 600px) {
+            .explore-header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .explore-header-text {
+                text-align: center;
+            }
+            
+            .explore-header-actions {
+                flex-direction: column;
+            }
+        }
+        
+        /* Spacer to let map show through AND be interactive */
+        .map-spacer {
+            flex: 1;
+            min-height: 50vh;
+            position: relative;
+        }
+        
+        /* When map is interactive, let clicks pass through the spacer */
+        .map-interactive .map-spacer {
+            pointer-events: none;
+        }
+        
+        .map-interactive #realm-map {
+            z-index: 15;
+        }
+        
+        .map-interactive .fog-overlay {
+            z-index: 14;
+        }
+        
+        /* Smooth content fade when transitioning to map interactive */
+        .content-section {
+            transition: opacity 0.5s ease;
+        }
+        
+        .map-interactive .content-section {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* Fixed Explore Header - outside content layer so z-index works */
+        .explore-header-fixed {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 20px;
+            background: rgba(10, 10, 10, 0.92);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(210, 129, 23, 0.3);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .explore-header-fixed.hidden {
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+        }
+        
+        /* Keep footer content above map */
+        .map-interactive .explore-footer {
+            position: relative;
+            z-index: 100;
+        }
+        
+        /* Keep nav links above map */
+        .map-interactive .realm-nav {
+            position: relative;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Bottom panel with SEO links and CTA */
+        .explore-footer {
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(210, 129, 23, 0.3);
+            padding: 2rem 20px;
+        }
+        
+        .explore-footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* SEO Enwella List (minimal) */
+        .enwella-seo-list {
+            margin-bottom: 2rem;
+        }
+        
+        .enwella-seo-title {
+            font-size: 0.85rem;
+            color: rgba(232, 227, 211, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+        
+        .enwella-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .enwella-links li a {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(45, 24, 16, 0.5);
+            border: 1px solid rgba(210, 129, 23, 0.25);
+            border-radius: 8px;
+            color: #e8e3d3;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .enwella-links li a:hover {
+            background: rgba(210, 129, 23, 0.2);
+            border-color: rgba(210, 129, 23, 0.5);
+            color: #E6941F;
+        }
+        
+        .enwella-links li a .enwella-link-type {
+            font-size: 0.7rem;
+            color: rgba(232, 227, 211, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+        
+        /* CTA in footer */
+        .explore-cta {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(210, 129, 23, 0.15);
+        }
+        
+        .cta-text {
+            color: #e8e3d3;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        /* Navigation */
+        .realm-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 2rem 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #e8e3d3;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid rgba(210, 129, 23, 0.3);
+            border-radius: 8px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #E6941F;
+            border-color: #E6941F;
+            background: rgba(210, 129, 23, 0.15);
+        }
+        
+        /* Progress Indicator */
+        .progress-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(210, 129, 23, 0.3);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            z-index: 100;
+            text-align: center;
+            transition: opacity 0.3s;
+        }
+        
+        .progress-indicator.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .progress-label {
+            font-size: 0.7rem;
+            color: rgba(232, 227, 211, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            width: 80px;
+            height: 4px;
+            background: rgba(210, 129, 23, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #D28117, #E6941F);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+        
+        /* Mapbox Popup Styling */
+        .mapboxgl-popup-content {
+            background: rgba(10, 10, 10, 0.95) !important;
+            border: 1px solid rgba(210, 129, 23, 0.4) !important;
+            border-radius: 12px !important;
+            padding: 0 !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+            min-width: 200px;
+        }
+        
+        .mapboxgl-popup-tip {
+            border-top-color: rgba(10, 10, 10, 0.95) !important;
+        }
+        
+        .mapboxgl-popup-close-button {
+            color: #E6941F !important;
+            font-size: 1.2rem;
+            padding: 5px 10px;
+        }
+        
+        .enwella-popup {
+            padding: 1rem;
+        }
+        
+        .enwella-popup-type {
+            font-size: 0.7rem;
+            color: rgba(232, 227, 211, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+        
+        .enwella-popup-name {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 1.2rem;
+            color: #E6941F;
+            margin-bottom: 0.75rem;
+        }
+        
+        .enwella-popup-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #D28117, #E6941F);
+            color: #0a0a0a;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .enwella-popup-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(210, 129, 23, 0.4);
+        }
+        
+        /* Footer adjustments */
+        .footer {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .realm-title {
+                font-size: 2.8rem;
+            }
+            
+            .realm-hero-content {
+                padding: 2rem;
+                margin: 0 1rem;
+            }
+            
+            .content-card {
+                padding: 1.75rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .realm-nav {
+                flex-direction: column;
+            }
+            
+            .progress-indicator {
+                bottom: 10px;
+                right: 10px;
+                padding: 0.75rem 1rem;
+            }
+            
+            .explore-title {
+                font-size: 1.6rem;
+            }
+            
+            .enwella-links {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Map Background -->
+    <div id="realm-map"></div>
+    
+    <!-- Fog Overlay -->
+    <div class="fog-overlay" id="fog"></div>
+    
+    <!-- Progress Indicator -->
+    <div class="progress-indicator hidden" id="progress">
+        <div class="progress-label">Realm Cleared</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </div>
+    
+    <!-- Fixed Explore Header (appears when map is interactive) -->
+    <div class="explore-header-fixed hidden" id="explore-header-fixed">
+        <div class="explore-header-content">
+            <div class="explore-header-text">
+                <h2 class="explore-title">Explore the Realm</h2>
+                <p class="explore-subtitle">Click the markers to discover the Enwella of Hook.</p>
+            </div>
+            <div class="explore-header-actions">
+                <span class="map-interact-hint">🗺️ Drag to pan</span>
+                <a href="#hero" class="back-to-top">↑ Back to top</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="/" style="display: flex; align-items: center; gap: 15px; text-decoration: none;">
+                        <img src="../../../Images/penralogo.png" alt="Project Enra" class="logo-img">
+                        <h1>Project Enra</h1>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/veilglass">Veilglass</a></li>
+                    <li><a href="/codex/" class="active">Codex</a></li>
+                    <li><a href="/tools">Tools</a></li>
+                    <li><a href="/#contact">Contact</a></li>
+                </ul>
+                <div class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Content Layer -->
+    <div class="content-layer">
+        <main>
+            <!-- Hero -->
+            <section class="realm-hero" id="hero">
+                <div class="realm-hero-content">
+                    <div class="realm-badge">Realm</div>
+                    <h1 class="realm-title">Hook</h1>
+                    <p class="realm-tagline">A coaching village on the road between worlds</p>
+                    <div class="scroll-prompt">
+                        Scroll to clear the fog
+                        <span>↓</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Article Content - All SEO-friendly, semantic HTML -->
+            <article class="content-section">
+                
+                <!-- Quick Stats -->
+                <div class="content-card" data-section="stats">
+                    <div class="stats-card">
+                        <div class="stat-item">
+                            <span class="stat-label">Toponymy</span>
+                            <span class="stat-value">Old English "hōc"</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">First Recorded</span>
+                            <span class="stat-value">1223</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">County</span>
+                            <span class="stat-value">Hampshire</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Historic Hundred</span>
+                            <span class="stat-value">Odiham</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Origins -->
+                <section class="content-card" data-section="origins" id="origins">
+                    <h2 class="section-title">Origins</h2>
+                    <p>
+                        The name Hook derives from the Old English word <em>hōc</em>, meaning a hook, angle, 
+                        or nook of land. The name was originally applied to woodland in this area, 
+                        describing land shaped like a hook between two tributaries of the River Whitewater.
+                        The earliest recorded spelling is <em>Hoc</em> in 1223.
+                        (<a href="https://www.oldhampshiremapped.org.uk/hantsgaz/hantsgaz/s0003364.htm" target="_blank" rel="noopener">Old Hampshire Mapped</a>)
+                    </p>
+                    
+                    <figure class="historic-map">
+                        <img src="images/Taylors_Hampshire_1759_Hook.png" 
+                             alt="Isaac Taylor's Map of Hampshire from 1759 showing Hook between Newnham and Odiham, with surrounding woodland and the main road" 
+                             loading="lazy">
+                        <figcaption>
+                            Hook on Isaac Taylor's large-scale survey of Hampshire, 1759 — nestled between 
+                            Newnham and Odiham, with the main London road running through.
+                            <span class="map-source">Isaac Taylor, surveyor. Engraved by Richard Benning, 1759.</span>
+                        </figcaption>
+                    </figure>
+                    
+                    <p>
+                        The earliest mention of Hook found in historical documents relates to a land dispute in 
+                        the thirteenth century. For most of its history, Hook was not a distinct settlement but 
+                        scattered farms and woodland within the neighbouring parishes of Odiham, Newnham, and 
+                        Nately Scures. It was not until 1932 that Hook was formed into its own civil 
+                        <a href="/codex/glossary/#parish">parish</a>, carved from parts of these three 
+                        neighbours within the <a href="/codex/glossary/#hundred">hundred</a> of Odiham.
+                        (<a href="https://hook.gov.uk/community-facilities/a-brief-history-of-hook" target="_blank" rel="noopener">Hook Parish Council</a>)
+                    </p>
+                </section>
+
+                <!-- Through the Ages -->
+                <section class="content-card" data-section="history" id="history">
+                    <h2 class="section-title">Through the Ages</h2>
+                    <p>
+                        Hook's story is the story of a road. The route from London to the south-west of 
+                        England — to Salisbury, Exeter, and ultimately Land's End — was one of the great 
+                        arteries of Georgian Britain. Every day, <a href="/codex/glossary/#stagecoach-route">stagecoaches</a> 
+                        thundered along this road carrying passengers, mail, and goods. And every few miles, 
+                        they needed to stop: to change horses, to rest, to eat. Hook was one of those stops.
+                    </p>
+                    
+                    <figure class="historic-map">
+                        <img src="images/Senex_London_To_Lands_End_Hook_1757.jpg" 
+                             alt="Senex strip map from 1757 showing The Road from London to Land's End, with Hook and Newnham marked on the route through Hampshire" 
+                             loading="lazy">
+                        <figcaption>
+                            "The Road from London to the Lands-End in Cornwal. Actually Surveyed by a Wheel." 
+                            Hook appears on this 1757 strip map, a vital stop on one of England's great coaching routes.
+                            <span class="map-source">John Senex, 1757</span>
+                        </figcaption>
+                    </figure>
+                    
+                    <p>
+                        By the 18th century, <a href="/codex/glossary/#coaching-inn">coaching inns</a> had 
+                        appeared along the main street, offering fresh horses, food, and lodging to travellers 
+                        making the long journey between capital and coast. In the late 18th century, a 
+                        <a href="/codex/glossary/#turnpike-road">turnpike road</a> was constructed to aid 
+                        navigation of the steep Scures Hill to the west — part of a network maintained by the 
+                        Basingstoke, Odiham, and Alton Turnpike Trust, established in 1736. The road improved, 
+                        the coaches grew faster, and Hook prospered.
+                    </p>
+                    <p>
+                        The railway changed everything. In 1839, a line was built through Hook on its way 
+                        from London to Basingstoke, but there was no station. Local landowners campaigned 
+                        for one, seeking better transport for timber and crops. Their campaign succeeded: 
+                        Hook railway station opened on 2 July 1883, signalling the birth of the modern village. 
+                        The coaches fell silent, their inns repurposed, but Hook had already learned the art 
+                        of serving travellers — a skill it would carry into the commuter age.
+                    </p>
+                    
+                    <figure class="historic-map">
+                        <img src="images/OS_1888-1915_Hook.png" 
+                             alt="Ordnance Survey map of Hook from 1888-1915 showing the London and South Western Railway, Hook Station, the White Hart pub, and milestone marker" 
+                             loading="lazy">
+                        <figcaption>
+                            Hook in the railway age. The Ordnance Survey shows the London & South Western Railway 
+                            cutting through the village, with the station, the White Hart (P.H.), and a milestone 
+                            marking "Basingstoke 6, Bagshot 13".
+                            <span class="map-source">Ordnance Survey, c. 1888–1915. National Library of Scotland.</span>
+                        </figcaption>
+                    </figure>
+                    <p>
+                        Today, Hook sits between two worlds: close enough to London for commuters, 
+                        rural enough to feel like Hampshire. The old coaching road is now the A30, 
+                        but echoes of the past remain for those who know where to look.
+                    </p>
+                </section>
+
+                <!-- The Realm Today -->
+                <section class="content-card" data-section="today" id="today">
+                    <h2 class="section-title">The Realm Today</h2>
+                    <p>
+                        Walk through Hook now and you'll find a village that has learned to balance 
+                        heritage with growth. The high street still follows the old coaching route, 
+                        lined with a mix of Victorian buildings and newer additions. The railway station 
+                        remains the village's connection to the wider world.
+                    </p>
+                    <p>
+                        Look closer and the layers reveal themselves: a historic coaching inn on London Road, 
+                        St John the Evangelist — a parish church consecrated in 1938 and designed by 
+                        Edward Maufe (architect of Guildford Cathedral) — and a war memorial that speaks 
+                        of sacrifice in two world wars. These are the Enwella of Hook — places where 
+                        history left its mark.
+                    </p>
+                    
+                    <div class="sources-section">
+                        <h4 class="sources-title">Sources</h4>
+                        <ul class="sources-list">
+                            <li><a href="https://hook.gov.uk/community-facilities/a-brief-history-of-hook" target="_blank" rel="noopener">Hook Parish Council: A Brief History of Hook</a></li>
+                            <li><a href="https://www.oldhampshiremapped.org.uk/hantsgaz/hantsgaz/s0003364.htm" target="_blank" rel="noopener">Old Hampshire Mapped: Hook</a></li>
+                            <li><a href="https://www.whitewaterchurches.co.uk/churches/st-johns-hook/about-st-johns/" target="_blank" rel="noopener">Whitewater Churches: St John's Hook</a></li>
+                            <li><a href="https://en.wikipedia.org/wiki/Hook_railway_station" target="_blank" rel="noopener">Wikipedia: Hook Railway Station</a></li>
+                        </ul>
+                    </div>
+                </section>
+
+            </article>
+
+            <!-- ============================================
+                 EXPLORE THE REALM - Interactive Map Section
+                 ============================================ -->
+            <section class="explore-section" id="explore">
+                
+                <!-- Spacer lets the map show through -->
+                <div class="map-spacer"></div>
+                
+                <!-- Footer with SEO links and CTA -->
+                <div class="explore-footer">
+                    <div class="explore-footer-content">
+                        
+                        <!-- SEO-friendly Enwella links (text fallback for crawlers) -->
+                        <div class="enwella-seo-list">
+                            <h3 class="enwella-seo-title">Enwella in this Realm</h3>
+                            <ul class="enwella-links">
+                                <li>
+                                    <a href="/codex/realms/hook/enwella/white-hart">
+                                        <span class="enwella-link-type">Pub</span>
+                                        The White Hart
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/codex/realms/hook/enwella/st-johns-church">
+                                        <span class="enwella-link-type">Church</span>
+                                        St John the Evangelist
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/codex/realms/hook/enwella/war-memorial">
+                                        <span class="enwella-link-type">Memorial</span>
+                                        Hook War Memorial
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- CTA -->
+                        <div class="explore-cta">
+                            <p class="cta-text">Ready to explore Hook? Plan a walking route, then discover it with Veilglass.</p>
+                            <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                                <a href="/tools/route-planner" class="btn btn-secondary">Plan a Route</a>
+                                <a href="/veilglass" class="btn btn-primary">Get Veilglass</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="realm-nav">
+                    <a href="/codex/" class="nav-link">← Back to Codex</a>
+                    <a href="/" class="nav-link">Return to Project Enra →</a>
+                </nav>
+            </section>
+
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>Project Enra</h3>
+                        <p>Creating tools and content for heritage discovery.</p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Explore</h3>
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/veilglass">Veilglass</a></li>
+                            <li><a href="/codex/">Codex</a></li>
+                            <li><a href="/tools">Tools</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Legal</h3>
+                        <ul>
+                            <li><a href="/privacy-policy">Privacy Policy</a></li>
+                            <li><a href="/terms-of-service">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="footer-bottom-content">
+                        <p>&copy; 2026 Project Enra. All rights reserved.</p>
+                        <div class="project-enra-credit">
+                            <img src="../../../Images/Moss-Covered Stone with Glowing Cracks.png" alt="Project Enra" class="enra-logo">
+                            <span>Project Enra</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // ============================================
+        // MAPBOX SETUP
+        // ============================================
+        
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic2xpa3Jpazg5IiwiYSI6ImNtOWo2OHFlaDA5aWcyanNiY2RkMndqOTMifQ.2grzIG93bbdQ8wmJV2KK6w';
+        
+        // Initialize map centered on Hook
+        const map = new mapboxgl.Map({
+            container: 'realm-map',
+            style: 'mapbox://styles/mapbox/dark-v11',
+            center: [-0.9635, 51.2840],
+            zoom: 14,
+            interactive: false, // Start non-interactive
+            attributionControl: false
+        });
+
+        map.addControl(new mapboxgl.AttributionControl({
+            compact: true
+        }), 'bottom-left');
+
+        // ============================================
+        // ENWELLA MARKERS WITH POPUPS
+        // ============================================
+        
+        const enwellaLocations = [
+            { 
+                name: 'The White Hart', 
+                type: 'Pub', 
+                coords: [-0.9610, 51.2835], 
+                link: 'enwella/white-hart.html',
+                description: 'Historic coaching inn'
+            },
+            { 
+                name: 'St John the Evangelist', 
+                type: 'Church', 
+                coords: [-0.9590, 51.2850], 
+                link: 'enwella/st-johns-church.html',
+                description: 'Parish church of Hook'
+            },
+            { 
+                name: 'Hook War Memorial', 
+                type: 'Memorial', 
+                coords: [-0.9625, 51.2838], 
+                link: 'enwella/war-memorial.html',
+                description: 'WWI & WWII memorial'
+            }
+        ];
+
+        const markers = [];
+
+        enwellaLocations.forEach(loc => {
+            // Create marker element
+            const el = document.createElement('div');
+            el.className = 'enwella-marker';
+            el.style.cssText = `
+                width: 28px;
+                height: 28px;
+                background: #E6941F;
+                border: 3px solid #0a0a0a;
+                border-radius: 50%;
+                box-shadow: 0 0 20px rgba(230, 148, 31, 0.7);
+                cursor: pointer;
+                opacity: 0;
+                transition: opacity 0.5s ease, box-shadow 0.3s ease;
+            `;
+            
+            el.addEventListener('mouseenter', () => {
+                el.style.boxShadow = '0 0 30px rgba(230, 148, 31, 1), 0 0 50px rgba(230, 148, 31, 0.5)';
+                el.style.background = '#F4A73B';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.boxShadow = '0 0 20px rgba(230, 148, 31, 0.7)';
+                el.style.background = '#E6941F';
+            });
+
+            // Create popup
+            const popup = new mapboxgl.Popup({ 
+                offset: 25,
+                closeButton: true,
+                closeOnClick: false
+            }).setHTML(`
+                <div class="enwella-popup">
+                    <div class="enwella-popup-type">${loc.type}</div>
+                    <div class="enwella-popup-name">${loc.name}</div>
+                    <a href="${loc.link}" class="enwella-popup-link">Explore →</a>
+                </div>
+            `);
+
+            const marker = new mapboxgl.Marker(el)
+                .setLngLat(loc.coords)
+                .setPopup(popup)
+                .addTo(map);
+            
+            markers.push({ marker, element: el, popup });
+        });
+
+        // ============================================
+        // SCROLL-DRIVEN FOG CLEARING + MAP INTERACTIVITY
+        // ============================================
+        
+        const fog = document.getElementById('fog');
+        const progress = document.getElementById('progress');
+        const progressFill = document.getElementById('progress-fill');
+        const exploreHeaderFixed = document.getElementById('explore-header-fixed');
+        let mapInteractive = false;
+        
+        function getScrollProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            return Math.min(scrollTop / docHeight, 1);
+        }
+        
+        function updateFog() {
+            const scrollProgress = getScrollProgress();
+            
+            // Show/hide progress indicator
+            if (scrollProgress > 0.05 && scrollProgress < 0.85) {
+                progress.classList.remove('hidden');
+            } else {
+                progress.classList.add('hidden');
+            }
+            
+            // Update progress bar
+            progressFill.style.width = `${scrollProgress * 100}%`;
+            
+            // Smooth fog clearing - starts immediately, fully clear by 80%
+            // Map starts appearing as soon as user scrolls
+            const fogOpacity = Math.max(0, 1 - (scrollProgress / 0.8));
+            fog.style.opacity = fogOpacity;
+            
+            // Show markers progressively - fade in smoothly
+            markers.forEach((m, index) => {
+                const threshold = 0.5 + (index * 0.1);
+                const markerOpacity = Math.min(1, Math.max(0, (scrollProgress - threshold) / 0.1));
+                m.element.style.opacity = markerOpacity;
+            });
+            
+            // Enable map interactivity when fog is cleared
+            // NOTE: We do NOT enable scrollZoom as it conflicts with page scrolling
+            if (scrollProgress > 0.85 && !mapInteractive) {
+                mapInteractive = true;
+                document.body.classList.add('map-interactive');
+                exploreHeaderFixed.classList.remove('hidden');
+                map.dragPan.enable();
+                map.doubleClickZoom.enable();
+                map.touchZoomRotate.enable();
+                // Add zoom controls for explicit zooming
+                if (!document.querySelector('.mapboxgl-ctrl-zoom-in')) {
+                    map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
+                }
+            } else if (scrollProgress <= 0.85 && mapInteractive) {
+                mapInteractive = false;
+                document.body.classList.remove('map-interactive');
+                exploreHeaderFixed.classList.add('hidden');
+                map.dragPan.disable();
+                map.doubleClickZoom.disable();
+                map.touchZoomRotate.disable();
+            }
+        }
+        
+        // Throttled scroll handler
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    updateFog();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+        
+        // Initial state
+        updateFog();
+
+        // ============================================
+        // MOBILE MENU
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    navToggle.classList.toggle('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
