@@ -42,6 +42,67 @@
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
+    <!-- Enwella Locations (Hook Realm) -->
+    <url>
+        <loc>https://www.project-enra.com/codex/realms/hook/enwella/bartley-heath/</loc>
+        <lastmod>2026-01-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.project-enra.com/codex/realms/hook/enwella/bassetts-mead/</loc>
+        <lastmod>2026-01-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.project-enra.com/codex/realms/hook/enwella/crooked-billet/</loc>
+        <lastmod>2026-01-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.project-enra.com/codex/realms/hook/enwella/hook-station/</loc>
+        <lastmod>2026-01-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.project-enra.com/codex/realms/hook/enwella/old-raven-house/</loc>
+        <lastmod>2026-01-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.project-enra.com/codex/realms/hook/enwella/old-white-hart/</loc>
+        <lastmod>2026-01-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.project-enra.com/codex/realms/hook/enwella/raven-hotel/</loc>
+        <lastmod>2026-01-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.project-enra.com/codex/realms/hook/enwella/st-johns-church/</loc>
+        <lastmod>2026-01-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.project-enra.com/codex/realms/hook/enwella/white-hart/</loc>
+        <lastmod>2026-01-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.project-enra.com/codex/realms/hook/enwella/whitewater-meadows/</loc>
+        <lastmod>2026-01-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
     <url>
         <loc>https://www.project-enra.com/privacy-policy</loc>
         <lastmod>2026-01-12</lastmod>

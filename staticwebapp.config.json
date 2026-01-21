@@ -11,6 +11,21 @@
       "statusCode": 301
     },
     {
+      "route": "/privacy-policy.html",
+      "redirect": "/privacy-policy",
+      "statusCode": 301
+    },
+    {
+      "route": "/terms-of-service.html",
+      "redirect": "/terms-of-service",
+      "statusCode": 301
+    },
+    {
+      "route": "/tools.html",
+      "redirect": "/tools",
+      "statusCode": 301
+    },
+    {
       "route": "/codex/index.html",
       "redirect": "/codex/",
       "statusCode": 301
@@ -21,8 +36,8 @@
       "statusCode": 301
     },
     {
-      "route": "/*.html",
-      "redirect": "/*",
+      "route": "/codex/glossary/index.html",
+      "redirect": "/codex/glossary/",
       "statusCode": 301
     }
   ],
