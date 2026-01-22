@@ -471,6 +471,43 @@
             flex: 1;
         }
         
+        /* Back to reading button */
+        .back-to-reading-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none; /* Hidden by default */
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.25rem;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(210, 129, 23, 0.4);
+            border-radius: 25px;
+            color: #e8e3d3;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            pointer-events: auto;
+        }
+        
+        /* Show button when map is interactive */
+        .map-interactive .back-to-reading-btn {
+            display: flex;
+        }
+        
+        .back-to-reading-btn:hover {
+            background: rgba(210, 129, 23, 0.2);
+            border-color: rgba(210, 129, 23, 0.6);
+            color: #E6941F;
+            transform: translateX(-50%) translateY(-2px);
+        }
+        
+        .back-to-reading-btn span:first-child {
+            font-size: 1.1rem;
+        }
         
         /* When map is interactive */
         .map-interactive #realm-map {
@@ -523,6 +560,14 @@
             .explore-header-content {
                 flex-direction: column;
                 gap: 1rem;
+            }
+            
+            /* Make back button more prominent on mobile */
+            .back-to-reading-btn {
+                bottom: 15px;
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             }
             
             .explore-header-text {
@@ -738,6 +783,12 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Back to top button (mobile-friendly) -->
+        <button class="back-to-reading-btn" id="back-to-reading-btn">
+            <span>↑</span>
+            <span>Back to top</span>
+        </button>
         
         <!-- Middle spacer - map shows through here -->
         <div class="explore-spacer"></div>
@@ -1288,6 +1339,13 @@
         });
         
         contentObserver.observe(lastContentCard);
+        
+        // Back to reading button - scroll to top and deactivate map mode
+        const backToReadingBtn = document.getElementById('back-to-reading-btn');
+        backToReadingBtn.addEventListener('click', () => {
+            deactivateMapMode();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
         
         // Throttled scroll handler for fog/marker updates
         let ticking = false;
