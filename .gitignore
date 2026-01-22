@@ -30,3 +30,5 @@ Thumbs.db
 
 # Internal documentation (not for publishing)
 .codex-standards.md
+ANALYTICS_STRATEGY.md
+SEARCH_CONSOLE_STRATEGY.md
