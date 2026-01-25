@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glossary - The Codex | Project Enra</title>
+    <title>Wordbook (Glossary) - The Codex | Project Enra</title>
     <meta name="description" content="A glossary of historical and heritage terms used throughout The Codex. Learn about turnpike roads, coaching inns, milestones, hundreds, and other features of Britain's past.">
-    <meta name="keywords" content="heritage glossary, historical terms, turnpike road, coaching inn, milestone, parish, hundred, tithe map, British history">
+    <meta name="keywords" content="heritage glossary, historical terms, turnpike road, coaching inn, milestone, parish, hundred, tithe map, British history, enric terms, enwella, realms, wayfarne, faerlands, project enra">
     
     <!-- Open Graph tags -->
-    <meta property="og:title" content="Glossary - The Codex | Project Enra">
+    <meta property="og:title" content="Wordbook (Glossary) - The Codex | Project Enra">
     <meta property="og:description" content="A glossary of historical and heritage terms. Learn about turnpike roads, coaching inns, milestones, and other features of Britain's past.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.project-enra.com/codex/glossary/">
@@ -31,7 +31,7 @@
     <script src="/analytics.js"></script>
     
     <style>
-        /* Glossary Page Styles */
+        /* Wordbook Page Styles */
         .glossary-hero {
             min-height: 40vh;
             display: flex;
@@ -118,6 +118,77 @@
         .term-entry:target {
             border-color: #E6941F;
             box-shadow: 0 0 30px rgba(210, 129, 23, 0.3);
+        }
+        
+        /* Enric Terms - special styling */
+        .term-entry-enric {
+            background: linear-gradient(135deg, rgba(45, 24, 16, 0.5), rgba(210, 129, 23, 0.12));
+            border-color: rgba(230, 148, 31, 0.35);
+        }
+        
+        .term-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .term-badge-enric {
+            background: linear-gradient(135deg, rgba(230, 148, 31, 0.25), rgba(210, 129, 23, 0.15));
+            color: #E6941F;
+            border: 1px solid rgba(230, 148, 31, 0.3);
+        }
+        
+        .term-badge-heritage {
+            background: rgba(232, 227, 211, 0.1);
+            color: rgba(232, 227, 211, 0.7);
+            border: 1px solid rgba(232, 227, 211, 0.2);
+        }
+        
+        .section-divider {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 20px;
+        }
+        
+        .section-divider-title {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 2rem;
+            color: #E6941F;
+            text-align: center;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 0 15px rgba(230, 148, 31, 0.4);
+        }
+        
+        .section-divider-description {
+            text-align: center;
+            color: rgba(232, 227, 211, 0.8);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+        
+        .term-etymology {
+            background: rgba(210, 129, 23, 0.08);
+            border-left: 3px solid rgba(230, 148, 31, 0.4);
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            color: rgba(232, 227, 211, 0.85);
+        }
+        
+        .term-etymology strong {
+            color: #E6941F;
+        }
+        
+        .term-etymology em {
+            color: rgba(232, 227, 211, 0.9);
+            font-style: italic;
         }
         
         .term-name {
@@ -237,58 +308,141 @@
         <section class="glossary-hero">
             <div class="glossary-hero-content">
                 <div class="glossary-badge">The Codex</div>
-                <h1 class="glossary-title">Glossary</h1>
-                <p class="glossary-subtitle">A reference of historical and heritage terms you'll encounter while exploring The Codex.</p>
+                <h1 class="glossary-title">Wordbook</h1>
+                <p class="glossary-subtitle">A reference of historical terms and Enric concepts you'll encounter while exploring The Codex.</p>
             </div>
         </section>
 
         <section class="terms-section">
             <div class="terms-container">
                 
+                <!-- THE ENRIC MYTHOS -->
+                <div class="section-divider">
+                    <h2 class="section-divider-title">The Enric Mythos</h2>
+                    <p class="section-divider-description">Terms created for Project Enra to describe our approach to heritage exploration — blending history, mindfulness, and the subtle magic of place.</p>
+                </div>
+                
+                <!-- Project Enra -->
+                <article class="term-entry term-entry-enric" id="project-enra">
+                    <div class="term-badge term-badge-enric">Project Enra Term</div>
+                    <h2 class="term-name">Project Enra</h2>
+                    <div class="term-etymology">
+                        <strong>Etymology:</strong> From Old English <em>enra</em> — energy, vital force
+                    </div>
+                    <p class="term-definition">A project dedicated to re-igniting the energy of local places through mindful exploration. By engaging with landscape, history, and hidden corners, we awaken our connection to the land and the stories it holds.</p>
+                </article>
+                
+                <!-- Enra -->
+                <article class="term-entry term-entry-enric" id="enra">
+                    <div class="term-badge term-badge-enric">Project Enra Term</div>
+                    <h2 class="term-name">Enra</h2>
+                    <div class="term-etymology">
+                        <strong>Etymology:</strong> Old English <em>enra</em> — energy, vital force
+                    </div>
+                    <p class="term-definition">The animating energy of place — the vital force that flows through landscapes when they are explored, noticed, and cherished. Enra is what we awaken when we walk mindfully through our local areas, connecting past and present through movement and attention.</p>
+                </article>
+                
+                <!-- Enwella -->
+                <article class="term-entry term-entry-enric" id="enwella">
+                    <div class="term-badge term-badge-enric">Project Enra Term</div>
+                    <h2 class="term-name">Enwella</h2>
+                    <div class="term-etymology">
+                        <strong>Etymology:</strong> A neologism created for Project Enra. From <em>Enra</em> (energy) + <em>Wella</em> (wells) → "Energy Wells"
+                    </div>
+                    <p class="term-definition">Places of significance where humans have gathered throughout history, absorbing and holding the emotions of those encounters. A hilltop holds awe and clarity. A pub holds joy and connection. A memorial holds remembrance and grounding. These are the points where the land remembers — the coaching inns and churches, the village greens and ancient oaks, the war memorials and market squares that shape a community's soul.</p>
+                    <p class="term-definition" style="margin-top: 0.75rem; font-size: 0.95rem; opacity: 0.85;"><strong>Examples:</strong> Historic pubs, parish churches, village greens, hilltops, memorials, ancient trees, gathering places</p>
+                </article>
+                
+                <!-- Realms -->
+                <article class="term-entry term-entry-enric" id="realms">
+                    <div class="term-badge term-badge-enric">Project Enra Term</div>
+                    <h2 class="term-name">Realms</h2>
+                    <div class="term-etymology">
+                        <strong>Etymology:</strong> A term adopted by Project Enra to describe administrative areas with historical roots
+                    </div>
+                    <p class="term-definition">Geographic areas defined by administrative boundaries — typically parishes, villages, or towns. In The Codex, each Realm represents a community with its own identity, history, and collection of Enwella. Realms follow real-world boundaries that have shaped local life for centuries, providing a framework for exploring heritage at a human scale.</p>
+                    <p class="term-definition" style="margin-top: 0.75rem; font-size: 0.95rem; opacity: 0.85;"><strong>Examples:</strong> Hook, Odiham, Hartley Wintney, Fleet</p>
+                </article>
+                
+                <!-- Wayfarne -->
+                <article class="term-entry term-entry-enric" id="wayfarne">
+                    <div class="term-badge term-badge-enric">Project Enra Term</div>
+                    <h2 class="term-name">Wayfarne</h2>
+                    <div class="term-etymology">
+                        <strong>Etymology:</strong> A neologism created for Project Enra. From Old English <em>weg</em> (way, path) + <em>faran</em> (to journey, to travel) → "Way-farers" or "Those who journey"
+                    </div>
+                    <p class="term-definition">People who feel the pull of the outside — the walkers, wanderers, and explorers drawn to paths and open landscapes. Throughout history, these are the individuals who keep the <em>enra</em> flowing through the land by moving through it, noticing it, and connecting with it. The Wayfarne are those who cannot resist the call of the horizon.</p>
+                </article>
+                
+                <!-- Faerlands -->
+                <article class="term-entry term-entry-enric" id="faerlands">
+                    <div class="term-badge term-badge-enric">Project Enra Term</div>
+                    <h2 class="term-name">Faerlands</h2>
+                    <div class="term-etymology">
+                        <strong>Etymology:</strong> A neologism created for Project Enra. From Old English <em>fær</em> (journey, passage) + <em>land</em> → "Journey-lands" or "Lands of passage"
+                    </div>
+                    <p class="term-definition">Geographic areas defined not by administrative boundaries, but by their natural or man-made character — forests that stretch across parishes, canals that cut through counties, ancient pathways that connect distant places. Faerlands are zones of movement and transition, where the landscape itself creates the identity rather than human borders.</p>
+                    <p class="term-definition" style="margin-top: 0.75rem; font-size: 0.95rem; opacity: 0.85;"><strong>Examples:</strong> The Basingstoke Canal, Alice Holt Forest, The Thames Path, long-distance trails, river valleys</p>
+                </article>
+                
+                <!-- HERITAGE TERMS -->
+                <div class="section-divider">
+                    <h2 class="section-divider-title">Heritage Terms</h2>
+                    <p class="section-divider-description">Historical terminology and concepts from Britain's past — the real words used by historians and heritage professionals.</p>
+                </div>
+                
                 <!-- Coaching Inn -->
                 <article class="term-entry" id="coaching-inn">
+                    <div class="term-badge term-badge-heritage">Historical Term</div>
                     <h2 class="term-name"><a href="/codex/glossary/coaching-inn/">Coaching Inn</a></h2>
                     <p class="term-definition">A type of inn that served as a stopping point along major coaching routes, providing food, drink, lodging, and fresh horses for stagecoach travellers. These inns were spaced roughly 10-15 miles apart — the distance a team of horses could travel before needing to be changed. Many coaching inns still exist today as pubs or hotels, often retaining their historic character and large stable yards.</p>
                 </article>
                 
                 <!-- Hundred -->
                 <article class="term-entry" id="hundred">
+                    <div class="term-badge term-badge-heritage">Historical Term</div>
                     <h2 class="term-name"><a href="/codex/glossary/hundred/">Hundred</a></h2>
                     <p class="term-definition">A historic administrative division of a county, used in England from the Anglo-Saxon period until the 19th century. Hundreds were used for taxation, military levies, and local justice. The name may derive from an area capable of supporting 100 households, or from the requirement to provide 100 fighting men. Each hundred had its own court that met regularly. Hook was part of the Hundred of Odiham.</p>
                 </article>
                 
                 <!-- Milestone -->
                 <article class="term-entry" id="milestone">
+                    <div class="term-badge term-badge-heritage">Historical Term</div>
                     <h2 class="term-name"><a href="/codex/glossary/milestone/">Milestone</a></h2>
                     <p class="term-definition">A stone marker placed along roads to indicate the distance to nearby towns or cities. Milestones became widespread in Britain during the turnpike era (18th-19th century), when they were often required by law on toll roads. Many survive today as listed heritage features, typically showing distances in miles to London or the nearest major settlement.</p>
                 </article>
                 
                 <!-- Parish -->
                 <article class="term-entry" id="parish">
+                    <div class="term-badge term-badge-heritage">Historical Term</div>
                     <h2 class="term-name"><a href="/codex/glossary/parish/">Parish</a></h2>
                     <p class="term-definition">A small administrative district, historically centred around a church. In England, civil parishes have existed since the medieval period and formed the basic unit of local government for centuries. Each parish maintained its own records, cared for its poor, and managed local affairs. The Codex organises Realms primarily by parish boundaries, reflecting these deep-rooted community identities.</p>
                 </article>
                 
                 <!-- Stagecoach Route -->
                 <article class="term-entry" id="stagecoach-route">
+                    <div class="term-badge term-badge-heritage">Historical Term</div>
                     <h2 class="term-name"><a href="/codex/glossary/stagecoach-route/">Stagecoach Route</a></h2>
                     <p class="term-definition">A scheduled route along which stagecoaches carried passengers and mail between towns and cities, particularly during the 18th and early 19th centuries. Routes were divided into "stages" — the distance between coach changes — with coaching inns at each stop. The London to Southampton route, passing through Hook, was one of the busiest in Hampshire.</p>
                 </article>
                 
                 <!-- Tithe Map -->
                 <article class="term-entry" id="tithe-map">
+                    <div class="term-badge term-badge-heritage">Historical Term</div>
                     <h2 class="term-name"><a href="/codex/glossary/tithe-map/">Tithe Map</a></h2>
                     <p class="term-definition">A detailed map created in the 1830s-40s as part of the Tithe Commutation Act, which converted the traditional payment of tithes (a tenth of agricultural produce to the church) into cash payments. Tithe maps show field boundaries, buildings, roads, and land use at a specific moment in time. They're invaluable for heritage research, often showing features that have since disappeared.</p>
                 </article>
                 
                 <!-- Toll House -->
                 <article class="term-entry" id="toll-house">
+                    <div class="term-badge term-badge-heritage">Historical Term</div>
                     <h2 class="term-name"><a href="/codex/glossary/toll-house/">Toll House</a></h2>
                     <p class="term-definition">A small building at a turnpike gate where tolls were collected from travellers using the road. Toll houses were typically positioned to give the toll keeper a clear view of approaching traffic in both directions. Many had distinctive architectural features — bay windows, overhanging upper floors, or hexagonal plans — and survive today as private homes, often recognisable by their position at road junctions.</p>
                 </article>
                 
                 <!-- Turnpike Road -->
                 <article class="term-entry" id="turnpike-road">
+                    <div class="term-badge term-badge-heritage">Historical Term</div>
                     <h2 class="term-name"><a href="/codex/glossary/turnpike-road/">Turnpike Road</a></h2>
                     <p class="term-definition">A toll road maintained by a turnpike trust, a private organisation authorised by Parliament to collect fees from travellers and use the income to maintain and improve the road. Turnpikes were common in Britain from the early 18th century until the railways made them obsolete in the mid-19th century. The name comes from the pike (a type of barrier) that blocked the road until the toll was paid. Many modern A-roads follow the routes of former turnpikes.</p>
                 </article>
