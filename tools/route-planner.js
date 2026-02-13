@@ -87,29 +87,17 @@
 
     // Historical map configurations
     const HISTORICAL_MAPS = {
-        'os-6inch-1st-gb': {
-            url: 'https://mapseries-tilesets.s3.amazonaws.com/1inch_2nd_ed/{z}/{x}/{y}.png',
-            attribution: '© National Library of Scotland',
-            maxZoom: 15,
-            name: 'OS 6-inch Scotland 1888-1913'
-        },
-        'os-25inch-gb': {
-            url: 'https://mapseries-tilesets.s3.amazonaws.com/25inch/{z}/{x}/{y}.png',
-            attribution: '© National Library of Scotland',
-            maxZoom: 17,
-            name: 'OS 25-inch Scotland 1892-1914'
+        'os-6inch-gb': {
+            url: 'https://api.maptiler.com/tiles/uk-osgb10k1888/{z}/{x}/{y}.png?key=oeIrkSBmY9laImjIUzoD',
+            attribution: '© National Library of Scotland, MapTiler',
+            maxZoom: 18,
+            name: 'OS 6-inch Great Britain 1888-1913'
         },
         'os-1inch-gb': {
             url: 'https://mapseries-tilesets.s3.amazonaws.com/1inch_2nd_ed/{z}/{x}/{y}.png',
             attribution: '© National Library of Scotland',
             maxZoom: 15,
-            name: 'OS One-Inch England & Wales'
-        },
-        'roy-lowlands': {
-            url: 'https://mapseries-tilesets.s3.amazonaws.com/roy/{z}/{x}/{y}.png',
-            attribution: '© National Library of Scotland',
-            maxZoom: 14,
-            name: 'Roy Military Survey 1747-1755'
+            name: 'OS 1-inch England & Wales 1885-1900'
         }
     };
 

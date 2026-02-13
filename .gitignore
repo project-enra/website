@@ -22,11 +22,21 @@ npm-debug.log*
 ehthumbs.db
 Thumbs.db
 
+# Krita project files
+*.kra
+*.kra~
+
+# Backup files
+*~
+
 # IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
+
+# Local development scripts
+start-server.bat
 
 # Internal documentation (not for publishing)
 .codex-standards.md

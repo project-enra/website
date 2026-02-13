@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hook - Realm of the Codex | Project Enra</title>
+    <title>Hook, Hampshire - Village History & Heritage | Project Enra</title>
     <meta name="description" content="Explore Hook, a Hampshire village shaped by the London to Southampton coaching route. Discover its history, heritage, and hidden Enwella through the Project Enra Codex.">
     <meta name="keywords" content="Hook Hampshire, Hook village history, Hook heritage, North Hampshire villages, Hampshire history">
     
@@ -35,7 +35,7 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
     
-    <link rel="stylesheet" href="../../../styles.css">
+    <link rel="stylesheet" href="/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
@@ -809,7 +809,7 @@
             <div class="nav-container">
                 <div class="nav-logo">
                     <a href="/" style="display: flex; align-items: center; gap: 15px; text-decoration: none;">
-                        <img src="../../../Images/penralogo.png" alt="Project Enra" class="logo-img">
+                        <img src="/Images/penralogo.png" alt="Project Enra" class="logo-img">
                         <h1>Project Enra</h1>
                     </a>
                 </div>
@@ -817,7 +817,7 @@
                     <li><a href="/">Home</a></li>
                     <li><a href="/veilglass">Veilglass</a></li>
                     <li><a href="/codex/" class="active">Codex</a></li>
-                    <li><a href="/tools">Tools</a></li>
+                    <li><a href="/tools/">Tools</a></li>
                     <li><a href="/#contact">Contact</a></li>
                 </ul>
                 <div class="nav-toggle">
@@ -882,7 +882,7 @@
                     </p>
                     
                     <figure class="historic-map">
-                        <img src="images/Taylors_Hampshire_1759_Hook.png" 
+                        <img src="/codex/realms/hook/images/Taylors_Hampshire_1759_Hook.png" 
                              alt="Isaac Taylor's Map of Hampshire from 1759 showing Hook between Newnham and Odiham, with surrounding woodland and the main road" 
                              loading="lazy">
                         <figcaption>
@@ -936,7 +936,7 @@
                     </p>
                     
                     <figure class="historic-map">
-                        <img src="images/Senex_London_To_Lands_End_Hook_1757.jpg" 
+                        <img src="/codex/realms/hook/images/Senex_London_To_Lands_End_Hook_1757.jpg" 
                              alt="Senex strip map from 1757 showing The Road from London to Land's End, with Hook and Newnham marked on the route through Hampshire" 
                              loading="lazy">
                         <figcaption>
@@ -965,7 +965,7 @@
                     </p>
                     
                     <figure class="historic-map">
-                        <img src="images/OS_1888-1915_Hook.png" 
+                        <img src="/codex/realms/hook/images/OS_1888-1915_Hook.png" 
                              alt="Ordnance Survey map of Hook from 1888-1915 showing the London and South Western Railway, Hook Station, the White Hart pub, and milestone marker" 
                              loading="lazy">
                         <figcaption>
@@ -1023,6 +1023,8 @@
                 <ul>
                     <li><a href="/codex/realms/hook/enwella/hook-station/">Hook Railway Station</a></li>
                     <li><a href="/codex/realms/hook/enwella/bartley-heath/">Bartley Heath - Nature Reserve</a></li>
+                    <li><a href="/codex/realms/hook/enwella/raven-hotel/">The Raven Hotel - Railway Era Hotel (1903-Present)</a></li>
+                    <li><a href="/codex/realms/hook/enwella/old-raven-house/">Old Raven House - Tudor Coaching Inn (1572-1902)</a></li>
                 </ul>
             </section>
 
@@ -1044,7 +1046,7 @@
                             <li><a href="/">Home</a></li>
                             <li><a href="/veilglass">Veilglass</a></li>
                             <li><a href="/codex/">Codex</a></li>
-                            <li><a href="/tools">Tools</a></li>
+                            <li><a href="/tools/">Tools</a></li>
                         </ul>
                     </div>
                     <div class="footer-section">
@@ -1059,7 +1061,7 @@
                     <div class="footer-bottom-content">
                         <p>&copy; 2026 Project Enra. All rights reserved.</p>
                         <div class="project-enra-credit">
-                            <img src="../../../Images/Moss-Covered Stone with Glowing Cracks.png" alt="Project Enra" class="enra-logo">
+                            <img src="/Images/Moss-Covered Stone with Glowing Cracks.png" alt="Project Enra" class="enra-logo">
                             <span>Project Enra</span>
                         </div>
                     </div>
@@ -1098,15 +1100,29 @@
                 name: 'Hook Railway Station', 
                 type: 'Station', 
                 coords: [-0.9615980727290431, 51.28008308516285], 
-                link: 'enwella/hook-station/',
+                link: '/codex/realms/hook/enwella/hook-station/',
                 description: 'Opened 1883, birth of modern Hook'
             },
             { 
                 name: 'Bartley Heath', 
                 type: 'Nature', 
                 coords: [-0.9556347991281431, 51.275390096815755], 
-                link: 'enwella/bartley-heath/',
+                link: '/codex/realms/hook/enwella/bartley-heath/',
                 description: 'SSSI heathland and woodland'
+            },
+            { 
+                name: 'The Raven Hotel', 
+                type: 'Historic Inn', 
+                coords: [-0.9616998892433885, 51.28104247193604], 
+                link: '/codex/realms/hook/enwella/raven-hotel/',
+                description: 'Historic coaching inn'
+            },
+            { 
+                name: 'Old Raven House', 
+                type: 'Heritage', 
+                coords: [-0.955667344070653, 51.28701293133916], 
+                link: '/codex/realms/hook/enwella/old-raven-house/',
+                description: 'Former inn, now residential'
             }
         ];
 

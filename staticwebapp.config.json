@@ -21,8 +21,8 @@
       "statusCode": 301
     },
     {
-      "route": "/tools.html",
-      "redirect": "/tools",
+      "route": "/tools/index.html",
+      "redirect": "/tools/",
       "statusCode": 301
     },
     {
